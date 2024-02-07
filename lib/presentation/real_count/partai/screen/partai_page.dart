@@ -168,6 +168,7 @@ class _PartaiViewState extends State<PartaiView> {
                           onChange: partaiProvider.setEnumeratorNotes),
                       const SizedBox(height: 24),
                       QCEntryButton(
+                        isLoading: partaiProvider.isSubmitLoading,
                         title: "Kirim",
                         onTap: () {
                           partaiProvider.submitPartai().then((value) {

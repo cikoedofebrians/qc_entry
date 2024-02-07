@@ -98,7 +98,9 @@ class SurveyTakeProvider extends ChangeNotifier {
     }
 
     if (currentQuestionIndex == surveyQuestions.length - 1) {
+      setSubmitLoading(true);
       final response = await surveyRepository.submitAnswer(submitBody);
+      setSubmitLoading(false);
       String message = "";
       response.fold((l) => message = l.message, (r) => message = "complete");
       return message;

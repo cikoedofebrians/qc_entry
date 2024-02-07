@@ -21,6 +21,13 @@ class PartaiProvider extends ChangeNotifier {
     jumlahDPT = newJumlahDPT;
   }
 
+  bool isSubmitLoading = false;
+
+  setSubmitLoading(bool newValue) {
+    isSubmitLoading = newValue;
+    notifyListeners();
+  }
+
   Future<String?> getData() async {
     isLoading = true;
     notifyListeners();
@@ -108,6 +115,7 @@ class PartaiProvider extends ChangeNotifier {
           },
         )
         .toList();
+    setSubmitLoading(true);
     final result = await realcountRepository.submitPilpar(
       dapilId: dapilList[selectedDapilIndex!].id,
       kelurahan:
@@ -118,6 +126,7 @@ class PartaiProvider extends ChangeNotifier {
       notes: enumeratorNotes,
       jumlahDPT: int.parse(jumlahDPT),
     );
+    setSubmitLoading(false);
 
     String? isError;
 

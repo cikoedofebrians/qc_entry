@@ -20,6 +20,13 @@ class PilpresProvider extends ChangeNotifier {
     jumlahDPT = newJumlahDPT;
   }
 
+  bool isSubmitLoading = false;
+
+  setSubmitLoading(bool newValue) {
+    isSubmitLoading = newValue;
+    notifyListeners();
+  }
+
   List<Capres> capresList = [];
 
   Future<String?> getData() async {
@@ -109,7 +116,7 @@ class PilpresProvider extends ChangeNotifier {
           },
         )
         .toList();
-
+    setSubmitLoading(true);
     final result = await realcountRepository.submitCapres(
       dapilId: dapilList[selectedDapilIndex!].id,
       kelurahan:
@@ -120,6 +127,7 @@ class PilpresProvider extends ChangeNotifier {
       notes: enumeratorNotes,
       jumlahDPT: int.parse(jumlahDPT),
     );
+    setSubmitLoading(false);
     String? isError;
 
     result.fold((l) => isError = l.message, (r) => null);

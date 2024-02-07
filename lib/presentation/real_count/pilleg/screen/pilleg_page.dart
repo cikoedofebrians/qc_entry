@@ -192,6 +192,7 @@ class _PartaiViewState extends State<PartaiView> {
                           onChange: pillegProvider.setEnumeratorNotes),
                       const SizedBox(height: 24),
                       QCEntryButton(
+                        isLoading: pillegProvider.isSubmitLoading,
                         title: "Kirim",
                         onTap: () {
                           pillegProvider.submitPilleg().then((value) {

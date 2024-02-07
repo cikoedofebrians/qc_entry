@@ -23,6 +23,13 @@ class PillegProvider extends ChangeNotifier {
     jumlahDPT = newJumlahDPT;
   }
 
+  bool isSubmitLoading = false;
+
+  setSubmitLoading(bool newValue) {
+    isSubmitLoading = newValue;
+    notifyListeners();
+  }
+
   List<Caleg> calegList = [];
 
   Future<String?> getData() async {
@@ -141,6 +148,7 @@ class PillegProvider extends ChangeNotifier {
         )
         .toList();
 
+    setSubmitLoading(true);
     final result = await realcountRepository.submitPilleg(
       dapilId: dapilList[selectedDapilIndex!].id,
       kelurahan:
@@ -151,6 +159,7 @@ class PillegProvider extends ChangeNotifier {
       notes: enumeratorNotes,
       jumlahDPT: int.parse(jumlahDPT),
     );
+    setSubmitLoading(false);
     String? isError;
 
     result.fold((l) => isError = l.message, (r) => null);

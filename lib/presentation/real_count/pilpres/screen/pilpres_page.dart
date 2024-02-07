@@ -168,6 +168,7 @@ class _PilpresViewState extends State<PilpresView> {
                           onChange: pilpresProvider.setEnumeratorNotes),
                       const SizedBox(height: 24),
                       QCEntryButton(
+                        isLoading: pilpresProvider.isSubmitLoading,
                         title: "Kirim",
                         onTap: () {
                           pilpresProvider.cubmitPilpres().then((value) {
