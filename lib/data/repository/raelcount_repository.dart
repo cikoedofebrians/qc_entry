@@ -54,6 +54,7 @@ class RealcountRepository {
       {required int partaiId, required int dapilId}) async {
     try {
       final response = await _dio.get(pillegUrl(partaiId, dapilId));
+
       List<Caleg> calegList = [];
       for (var caleg in response.data['data']) {
         calegList.add(Caleg.fromJson(caleg));
@@ -65,7 +66,6 @@ class RealcountRepository {
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
-      // print(_);
       return const Left(ParsingFailure("Terjadi kesalahan"));
     }
   }
@@ -95,6 +95,7 @@ class RealcountRepository {
     required List<Map<String, int>> hasilSuaraSah,
     required int hasilSuaraTidakSah,
     required String notes,
+    required int jumlahDPT,
   }) async {
     try {
       await _dio.post(submitPilpresUrl, data: {
@@ -104,6 +105,7 @@ class RealcountRepository {
         'hasil_suara_sah': hasilSuaraSah,
         'hasil_suara_tidak_sah': hasilSuaraTidakSah,
         'laporan': notes,
+        'jumlah_dpt': jumlahDPT,
       });
       return const Right(null);
     } on DioException catch (e) {
@@ -123,6 +125,7 @@ class RealcountRepository {
     required List<Map<String, int>> hasilSuaraSah,
     required int hasilSuaraTidakSah,
     required String notes,
+    required int jumlahDPT,
   }) async {
     try {
       await _dio.post(submitPilparUrl, data: {
@@ -132,6 +135,7 @@ class RealcountRepository {
         'hasil_suara_sah': hasilSuaraSah,
         'hasil_suara_tidak_sah': hasilSuaraTidakSah,
         'laporan': notes,
+        'jumlah_dpt': jumlahDPT,
       });
       return const Right(null);
     } on DioException catch (e) {
@@ -151,6 +155,7 @@ class RealcountRepository {
     required List<Map<String, int>> hasilSuaraSah,
     required int hasilSuaraTidakSah,
     required String notes,
+    required int jumlahDPT,
   }) async {
     try {
       await _dio.post(submitPillegUrl, data: {
@@ -160,6 +165,7 @@ class RealcountRepository {
         'hasil_suara_sah': hasilSuaraSah,
         'hasil_suara_tidak_sah': hasilSuaraTidakSah,
         'laporan': notes,
+        'jumlah_dpt': jumlahDPT,
       });
       return const Right(null);
     } on DioException catch (e) {

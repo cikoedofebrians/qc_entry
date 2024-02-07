@@ -17,6 +17,11 @@ class PillegProvider extends ChangeNotifier {
   String unsuccessfulVotes = "";
   String tps = "";
   String enumeratorNotes = "";
+  String jumlahDPT = "";
+
+  setJumlahDPT(String newJumlahDPT) {
+    jumlahDPT = newJumlahDPT;
+  }
 
   List<Caleg> calegList = [];
 
@@ -113,6 +118,7 @@ class PillegProvider extends ChangeNotifier {
     if (selectedDapilIndex == null) return "Dapil tidak boleh kosong";
     if (selectedKelurahanIndex == null) return "Kelurahan tidak boleh kosong";
     if (selectedPartaiIndex == null) return "Partai tidak boleh kosong";
+    if (jumlahDPT.isEmpty) return "Jumlah DPT tidak boleh kosong";
 
     if (tps.isEmpty) return "TPS tidak boleh kosong";
     for (var caleg in calegList) {
@@ -143,6 +149,7 @@ class PillegProvider extends ChangeNotifier {
       hasilSuaraSah: hasilSuaraSah,
       hasilSuaraTidakSah: int.parse(unsuccessfulVotes),
       notes: enumeratorNotes,
+      jumlahDPT: int.parse(jumlahDPT),
     );
     String? isError;
 

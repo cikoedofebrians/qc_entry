@@ -15,6 +15,11 @@ class PartaiProvider extends ChangeNotifier {
   String unsuccessfulVotes = "";
   String tps = "";
   String enumeratorNotes = "";
+  String jumlahDPT = "";
+
+  setJumlahDPT(String newJumlahDPT) {
+    jumlahDPT = newJumlahDPT;
+  }
 
   Future<String?> getData() async {
     isLoading = true;
@@ -82,6 +87,8 @@ class PartaiProvider extends ChangeNotifier {
     if (selectedDapilIndex == null) return "Dapil tidak boleh kosong";
     if (selectedKelurahanIndex == null) return "Kelurahan tidak boleh kosong";
     if (tps.isEmpty) return "TPS tidak boleh kosong";
+    if (jumlahDPT.isEmpty) return "Jumlah DPT tidak boleh kosong";
+
     for (var partai in partaiList) {
       if (partai.suara.isEmpty) {
         return "Suara partai tidak boleh ada yang kosong";
@@ -101,7 +108,6 @@ class PartaiProvider extends ChangeNotifier {
           },
         )
         .toList();
-
     final result = await realcountRepository.submitPilpar(
       dapilId: dapilList[selectedDapilIndex!].id,
       kelurahan:
@@ -110,7 +116,9 @@ class PartaiProvider extends ChangeNotifier {
       hasilSuaraSah: hasilSuaraSah,
       hasilSuaraTidakSah: int.parse(unsuccessfulVotes),
       notes: enumeratorNotes,
+      jumlahDPT: int.parse(jumlahDPT),
     );
+
     String? isError;
 
     result.fold((l) => isError = l.message, (r) => null);

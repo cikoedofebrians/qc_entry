@@ -123,6 +123,20 @@ class _PilpresViewState extends State<PilpresView> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10))),
                       ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        onChanged: (value) =>
+                            pilpresProvider.setJumlahDPT(value),
+                        decoration: InputDecoration(
+                            label: Text(
+                              "Jumlah DPT",
+                              style: AppTextStyle.body3
+                                  .setSemiBold()
+                                  .copyWith(color: AppColor.primaryColor),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
                       const SizedBox(
                         height: 24,
                       ),

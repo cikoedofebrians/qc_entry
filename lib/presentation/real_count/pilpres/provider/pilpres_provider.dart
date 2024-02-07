@@ -14,6 +14,11 @@ class PilpresProvider extends ChangeNotifier {
   String unsuccessfulVotes = "";
   String tps = "";
   String enumeratorNotes = "";
+  String jumlahDPT = "";
+
+  setJumlahDPT(String newJumlahDPT) {
+    jumlahDPT = newJumlahDPT;
+  }
 
   List<Capres> capresList = [];
 
@@ -83,6 +88,8 @@ class PilpresProvider extends ChangeNotifier {
     if (selectedDapilIndex == null) return "Dapil tidak boleh kosong";
     if (selectedKelurahanIndex == null) return "Kelurahan tidak boleh kosong";
     if (tps.isEmpty) return "TPS tidak boleh kosong";
+    if (jumlahDPT.isEmpty) return "Jumlah DPT tidak boleh kosong";
+
     for (var capres in capresList) {
       if (capres.suara.isEmpty) {
         return "Suara presiden tidak boleh ada yang kosong";
@@ -111,6 +118,7 @@ class PilpresProvider extends ChangeNotifier {
       hasilSuaraSah: hasilSuaraSah,
       hasilSuaraTidakSah: int.parse(unsuccessfulVotes),
       notes: enumeratorNotes,
+      jumlahDPT: int.parse(jumlahDPT),
     );
     String? isError;
 

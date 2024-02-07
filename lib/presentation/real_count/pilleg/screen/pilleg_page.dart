@@ -41,6 +41,7 @@ class _PartaiViewState extends State<PartaiView> {
   late final TextEditingController dapilTextEditingController;
   late final TextEditingController kelurahanTextEditingController;
   late final TextEditingController partaiTextEditingController;
+  late final TextEditingController jumlahDPTTextEditingController;
   @override
   void initState() {
     dapilTextEditingController = TextEditingController();
@@ -131,6 +132,20 @@ class _PartaiViewState extends State<PartaiView> {
                         decoration: InputDecoration(
                             label: Text(
                               "TPS",
+                              style: AppTextStyle.body3
+                                  .setSemiBold()
+                                  .copyWith(color: AppColor.primaryColor),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        onChanged: (value) =>
+                            pillegProvider.setJumlahDPT(value),
+                        decoration: InputDecoration(
+                            label: Text(
+                              "Jumlah DPT",
                               style: AppTextStyle.body3
                                   .setSemiBold()
                                   .copyWith(color: AppColor.primaryColor),

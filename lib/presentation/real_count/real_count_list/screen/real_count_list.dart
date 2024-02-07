@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
-import 'package:qc_entry/presentation/real_count/partai/screen/partai_screen.dart';
+import 'package:qc_entry/presentation/real_count/partai/screen/partai_page.dart';
 import 'package:qc_entry/presentation/real_count/pilleg/screen/pilleg_page.dart';
 import 'package:qc_entry/presentation/real_count/pilpres/screen/pilpres_page.dart';
 

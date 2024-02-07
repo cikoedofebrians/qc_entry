@@ -1,7 +1,7 @@
 class Caleg {
   final int id;
-  final int partaiId;
-  final int dapilId;
+  final String partaiId;
+  final String dapilId;
   final String nama;
   final String noUrut;
   final String suara;
@@ -17,8 +17,8 @@ class Caleg {
 
   Caleg copyWith({
     int? id,
-    int? partaiId,
-    int? dapilId,
+    String? partaiId,
+    String? dapilId,
     String? nama,
     String? noUrut,
     String? suara,
