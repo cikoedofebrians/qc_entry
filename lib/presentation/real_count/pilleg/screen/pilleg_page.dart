@@ -4,7 +4,7 @@ import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/injector/injector.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
-import 'package:qc_entry/presentation/real_count/pilpres/provider/pilpres_provider.dart';
+import 'package:qc_entry/presentation/real_count/pilleg/provider/pilleg_provider.dart';
 import 'package:qc_entry/presentation/real_count/shared/enumerator_notes.dart';
 import 'package:qc_entry/presentation/real_count/shared/voice_text_field.dart';
 import 'package:qc_entry/presentation/shared/custom_.dart';
@@ -12,39 +12,40 @@ import 'package:qc_entry/presentation/shared/custom_button.dart';
 import 'package:qc_entry/presentation/shared/custom_dropdown.dart';
 import 'package:qc_entry/presentation/survey/complete/screen/complete_page.dart';
 
-class PilpresPage extends StatelessWidget {
-  const PilpresPage({super.key});
+class PillegPage extends StatelessWidget {
+  const PillegPage({super.key});
 
-  static const route = 'real-count/pilpres';
+  static const route = 'real-count/pilleg';
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => getIt<PilpresProvider>()
+        create: (context) => getIt<PillegProvider>()
           ..getData().then((value) {
             if (value != null) {
               showQCEntrySnackBar(context: context, title: value);
             }
           }),
-        child: const PilpresView());
+        child: const PartaiView());
   }
 }
 
-class PilpresView extends StatefulWidget {
-  const PilpresView({super.key});
+class PartaiView extends StatefulWidget {
+  const PartaiView({super.key});
 
   @override
-  State<PilpresView> createState() => _PilpresViewState();
+  State<PartaiView> createState() => _PartaiViewState();
 }
 
-class _PilpresViewState extends State<PilpresView> {
+class _PartaiViewState extends State<PartaiView> {
   late final TextEditingController dapilTextEditingController;
   late final TextEditingController kelurahanTextEditingController;
-
+  late final TextEditingController partaiTextEditingController;
   @override
   void initState() {
     dapilTextEditingController = TextEditingController();
     kelurahanTextEditingController = TextEditingController();
+    partaiTextEditingController = TextEditingController();
     super.initState();
   }
 
@@ -52,19 +53,20 @@ class _PilpresViewState extends State<PilpresView> {
   void dispose() {
     dapilTextEditingController.dispose();
     kelurahanTextEditingController.dispose();
+    partaiTextEditingController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final pilpresProvider = Provider.of<PilpresProvider>(context);
+    final pillegProvider = Provider.of<PillegProvider>(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Pemilihan Presiden"),
+          title: const Text("Pemilihan Legislatif"),
         ),
-        body: pilpresProvider.isLoading
+        body: pillegProvider.isLoading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 child: Padding(
@@ -75,44 +77,57 @@ class _PilpresViewState extends State<PilpresView> {
                       QCEntryDropdown(
                         textEditingController: dapilTextEditingController,
                         items: List.generate(
-                          pilpresProvider.dapilList.length,
+                          pillegProvider.dapilList.length,
                           (index) => DropdownMenuEntry(
                               value: index,
-                              label: pilpresProvider.dapilList[index].index),
+                              label: pillegProvider.dapilList[index].index),
                         ),
                         label: "Dapil",
                         onSelected: (selectedItems) {
                           kelurahanTextEditingController.clear();
-                          pilpresProvider.setSelectedKelurahanIndex(null);
-                          pilpresProvider.setSelectedDapilIndex(selectedItems);
+                          pillegProvider.setSelectedKelurahanIndex(null);
+                          pillegProvider.setSelectedDapilIndex(selectedItems);
                         },
                       ),
                       const SizedBox(height: 12),
                       QCEntryDropdown(
                         textEditingController: kelurahanTextEditingController,
                         items: List.generate(
-                            pilpresProvider.selectedDapilIndex != null
-                                ? pilpresProvider
+                            pillegProvider.selectedDapilIndex != null
+                                ? pillegProvider
                                     .dapilList[
-                                        pilpresProvider.selectedDapilIndex!]
+                                        pillegProvider.selectedDapilIndex!]
                                     .kelurahan
                                     .length
                                 : 0,
                             (index) => DropdownMenuEntry(
                                 value: index,
-                                label: pilpresProvider
+                                label: pillegProvider
                                     .dapilList[
-                                        pilpresProvider.selectedDapilIndex!]
+                                        pillegProvider.selectedDapilIndex!]
                                     .kelurahan[index])),
                         label: "Kelurahan",
                         onSelected: (selectedItems) {
-                          pilpresProvider
+                          pillegProvider
                               .setSelectedKelurahanIndex(selectedItems);
                         },
                       ),
                       const SizedBox(height: 12),
+                      QCEntryDropdown(
+                        textEditingController: partaiTextEditingController,
+                        items: List.generate(
+                            pillegProvider.partaiList.length,
+                            (index) => DropdownMenuEntry(
+                                value: index,
+                                label: pillegProvider.partaiList[index].nama)),
+                        label: "Partai",
+                        onSelected: (selectedItems) {
+                          pillegProvider.setSelectedPartaiIndex(selectedItems);
+                        },
+                      ),
+                      const SizedBox(height: 12),
                       TextField(
-                        onChanged: (value) => pilpresProvider.setTPS(value),
+                        onChanged: (value) => pillegProvider.setTPS(value),
                         decoration: InputDecoration(
                             label: Text(
                               "TPS",
@@ -127,7 +142,7 @@ class _PilpresViewState extends State<PilpresView> {
                         height: 24,
                       ),
                       Text(
-                        "Suara per Presiden",
+                        "Suara per Legislatif",
                         style: AppTextStyle.heading5
                             .setSemiBold()
                             .copyWith(color: AppColor.secondaryColor),
@@ -137,26 +152,34 @@ class _PilpresViewState extends State<PilpresView> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) => VoiceTextField(
-                            label: pilpresProvider.capresList[index].namaPaslon,
-                            onChange: pilpresProvider.changePresidentVoiceCount,
+                            leading: Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: CircleAvatar(
+                                backgroundColor: AppColor.quaternaryColor,
+                                child: Text(
+                                    pillegProvider.calegList[index].noUrut),
+                              ),
+                            ),
+                            label: pillegProvider.calegList[index].nama,
+                            onChange: pillegProvider.changePresidentVoiceCount,
                             index: index),
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 12),
-                        itemCount: pilpresProvider.capresList.length,
+                        itemCount: pillegProvider.calegList.length,
                       ),
                       const Divider(),
                       VoiceTextField(
                         label: "Suara Tidak Sah",
-                        onChangeNormal: pilpresProvider.setUnsuccessfulVotes,
+                        onChangeNormal: pillegProvider.setUnsuccessfulVotes,
                       ),
                       const SizedBox(height: 24),
                       EnumeratorNotes(
-                          onChange: pilpresProvider.setEnumeratorNotes),
+                          onChange: pillegProvider.setEnumeratorNotes),
                       const SizedBox(height: 24),
                       QCEntryButton(
                         title: "Kirim",
                         onTap: () {
-                          pilpresProvider.cubmitPilpres().then((value) {
+                          pillegProvider.submitPilleg().then((value) {
                             if (value != null) {
                               showQCEntrySnackBar(
                                   context: context, title: value);

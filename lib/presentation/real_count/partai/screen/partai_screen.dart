@@ -4,7 +4,7 @@ import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/injector/injector.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
-import 'package:qc_entry/presentation/real_count/pilpres/provider/pilpres_provider.dart';
+import 'package:qc_entry/presentation/real_count/partai/provider/partai_provider.dart';
 import 'package:qc_entry/presentation/real_count/shared/enumerator_notes.dart';
 import 'package:qc_entry/presentation/real_count/shared/voice_text_field.dart';
 import 'package:qc_entry/presentation/shared/custom_.dart';
@@ -12,32 +12,32 @@ import 'package:qc_entry/presentation/shared/custom_button.dart';
 import 'package:qc_entry/presentation/shared/custom_dropdown.dart';
 import 'package:qc_entry/presentation/survey/complete/screen/complete_page.dart';
 
-class PilpresPage extends StatelessWidget {
-  const PilpresPage({super.key});
+class PartaiPage extends StatelessWidget {
+  const PartaiPage({super.key});
 
-  static const route = 'real-count/pilpres';
+  static const route = 'real-count/partai';
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => getIt<PilpresProvider>()
+        create: (context) => getIt<PartaiProvider>()
           ..getData().then((value) {
             if (value != null) {
               showQCEntrySnackBar(context: context, title: value);
             }
           }),
-        child: const PilpresView());
+        child: const PartaiView());
   }
 }
 
-class PilpresView extends StatefulWidget {
-  const PilpresView({super.key});
+class PartaiView extends StatefulWidget {
+  const PartaiView({super.key});
 
   @override
-  State<PilpresView> createState() => _PilpresViewState();
+  State<PartaiView> createState() => _PartaiViewState();
 }
 
-class _PilpresViewState extends State<PilpresView> {
+class _PartaiViewState extends State<PartaiView> {
   late final TextEditingController dapilTextEditingController;
   late final TextEditingController kelurahanTextEditingController;
 
@@ -57,14 +57,14 @@ class _PilpresViewState extends State<PilpresView> {
 
   @override
   Widget build(BuildContext context) {
-    final pilpresProvider = Provider.of<PilpresProvider>(context);
+    final partaiProvider = Provider.of<PartaiProvider>(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Pemilihan Presiden"),
+          title: const Text("Pemilihan Partai"),
         ),
-        body: pilpresProvider.isLoading
+        body: partaiProvider.isLoading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 child: Padding(
@@ -75,44 +75,44 @@ class _PilpresViewState extends State<PilpresView> {
                       QCEntryDropdown(
                         textEditingController: dapilTextEditingController,
                         items: List.generate(
-                          pilpresProvider.dapilList.length,
+                          partaiProvider.dapilList.length,
                           (index) => DropdownMenuEntry(
                               value: index,
-                              label: pilpresProvider.dapilList[index].index),
+                              label: partaiProvider.dapilList[index].index),
                         ),
                         label: "Dapil",
                         onSelected: (selectedItems) {
                           kelurahanTextEditingController.clear();
-                          pilpresProvider.setSelectedKelurahanIndex(null);
-                          pilpresProvider.setSelectedDapilIndex(selectedItems);
+                          partaiProvider.setSelectedKelurahanIndex(null);
+                          partaiProvider.setSelectedDapilIndex(selectedItems);
                         },
                       ),
                       const SizedBox(height: 12),
                       QCEntryDropdown(
                         textEditingController: kelurahanTextEditingController,
                         items: List.generate(
-                            pilpresProvider.selectedDapilIndex != null
-                                ? pilpresProvider
+                            partaiProvider.selectedDapilIndex != null
+                                ? partaiProvider
                                     .dapilList[
-                                        pilpresProvider.selectedDapilIndex!]
+                                        partaiProvider.selectedDapilIndex!]
                                     .kelurahan
                                     .length
                                 : 0,
                             (index) => DropdownMenuEntry(
                                 value: index,
-                                label: pilpresProvider
+                                label: partaiProvider
                                     .dapilList[
-                                        pilpresProvider.selectedDapilIndex!]
+                                        partaiProvider.selectedDapilIndex!]
                                     .kelurahan[index])),
                         label: "Kelurahan",
                         onSelected: (selectedItems) {
-                          pilpresProvider
+                          partaiProvider
                               .setSelectedKelurahanIndex(selectedItems);
                         },
                       ),
                       const SizedBox(height: 12),
                       TextField(
-                        onChanged: (value) => pilpresProvider.setTPS(value),
+                        onChanged: (value) => partaiProvider.setTPS(value),
                         decoration: InputDecoration(
                             label: Text(
                               "TPS",
@@ -127,7 +127,7 @@ class _PilpresViewState extends State<PilpresView> {
                         height: 24,
                       ),
                       Text(
-                        "Suara per Presiden",
+                        "Suara per Partai",
                         style: AppTextStyle.heading5
                             .setSemiBold()
                             .copyWith(color: AppColor.secondaryColor),
@@ -137,26 +137,26 @@ class _PilpresViewState extends State<PilpresView> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) => VoiceTextField(
-                            label: pilpresProvider.capresList[index].namaPaslon,
-                            onChange: pilpresProvider.changePresidentVoiceCount,
+                            label: partaiProvider.partaiList[index].nama,
+                            onChange: partaiProvider.changePresidentVoiceCount,
                             index: index),
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 12),
-                        itemCount: pilpresProvider.capresList.length,
+                        itemCount: partaiProvider.partaiList.length,
                       ),
                       const Divider(),
                       VoiceTextField(
                         label: "Suara Tidak Sah",
-                        onChangeNormal: pilpresProvider.setUnsuccessfulVotes,
+                        onChangeNormal: partaiProvider.setUnsuccessfulVotes,
                       ),
                       const SizedBox(height: 24),
                       EnumeratorNotes(
-                          onChange: pilpresProvider.setEnumeratorNotes),
+                          onChange: partaiProvider.setEnumeratorNotes),
                       const SizedBox(height: 24),
                       QCEntryButton(
                         title: "Kirim",
                         onTap: () {
-                          pilpresProvider.cubmitPilpres().then((value) {
+                          partaiProvider.submitPartai().then((value) {
                             if (value != null) {
                               showQCEntrySnackBar(
                                   context: context, title: value);

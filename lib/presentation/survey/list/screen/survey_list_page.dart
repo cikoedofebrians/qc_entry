@@ -34,9 +34,9 @@ class SurveyListView extends StatelessWidget {
           : ListView.separated(
               padding: const EdgeInsets.all(24),
               itemBuilder: (_, index) => SurveyListItem(
-                    title: surveyListProvider.surveyList[index].title,
+                    deskripsi: surveyListProvider.surveyList[index].deskripsi,
+                    title: surveyListProvider.surveyList[index].judul,
                     id: surveyListProvider.surveyList[index].id,
-                    isTaken: surveyListProvider.surveyList[index].isTaken,
                   ),
               separatorBuilder: (_, __) => const SizedBox(
                     height: 12,

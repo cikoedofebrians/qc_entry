@@ -9,6 +9,7 @@ import 'package:qc_entry/data/model/survey/survey_question/survey_question.dart'
 import 'package:qc_entry/presentation/shared/custom_.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
 import 'package:qc_entry/presentation/survey/complete/screen/complete_page.dart';
+import 'package:qc_entry/presentation/survey/list/component/survey_list_item.dart';
 import 'package:qc_entry/presentation/survey/take/provider/survey_take_provider.dart';
 
 class SurveyTakePage extends StatelessWidget {
@@ -17,18 +18,22 @@ class SurveyTakePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surveyId = ModalRoute.of(context)!.settings.arguments as int;
+    final surveyId =
+        ModalRoute.of(context)!.settings.arguments as SurveyTakeParams;
     return ChangeNotifierProvider(
       create: (context) =>
-          getIt<SurveyTakeProvider>()..getAllQuestions(surveyId),
-      child: const SurveyTakeView(),
+          getIt<SurveyTakeProvider>()..getAllQuestions(surveyId.id),
+      child: SurveyTakeView(
+        title: surveyId.title,
+      ),
     );
   }
 }
 
 class SurveyTakeView extends StatefulWidget {
-  const SurveyTakeView({super.key});
+  const SurveyTakeView({super.key, required this.title});
 
+  final String title;
   @override
   State<SurveyTakeView> createState() => _SurveyTakeViewState();
 }
@@ -52,7 +57,7 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
     final surveyTakeProvider = Provider.of<SurveyTakeProvider>(context);
     final appbar = AppBar(
       automaticallyImplyLeading: true,
-      title: const Text("Survei Tahap 2"),
+      title: Text(widget.title),
     );
     final mediaQuery = MediaQuery.of(context);
     // ignore: deprecated_member_use
@@ -61,12 +66,14 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
       child: Scaffold(
         appBar: appbar,
         body: Builder(builder: (context) {
-          if (surveyTakeProvider.isLoading) {
+          if (surveyTakeProvider.isLoading ||
+              surveyTakeProvider.surveyQuestions.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
           final currentQuestion = surveyTakeProvider
               .surveyQuestions[surveyTakeProvider.currentQuestionIndex];
           final QuestionType currentQuestionType = currentQuestion.type;
+          // final currentQuestionType = QuestionType.DATE;
 
           return SingleChildScrollView(
             child: Container(
@@ -120,7 +127,8 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     border: Border.all(
-                                        width: 2, color: AppColor.primaryColor),
+                                        width: 2,
+                                        color: AppColor.secondaryColor),
                                     borderRadius: BorderRadius.circular(10),
                                     boxShadow: [
                                       BoxShadow(
@@ -132,12 +140,61 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                     controller: textEditingController,
                                     onChanged: (value) => surveyTakeProvider
                                         .changeTextArea(value),
-                                    maxLines: null,
+                                    maxLines: currentQuestionType ==
+                                            QuestionType.TEXTAREA
+                                        ? null
+                                        : 1,
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
                                         contentPadding: EdgeInsets.all(10),
                                         hintText: "Isi jawaban anda disini..."),
                                   ),
+                                );
+                              } else if (currentQuestionType ==
+                                  QuestionType.NUMBER) {
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Isi dengan angka",
+                                        style: AppTextStyle.body1
+                                            .setRegular()
+                                            .copyWith(
+                                                color: AppColor.secondaryColor),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            width: 2,
+                                            color: AppColor.secondaryColor),
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 10,
+                                              color:
+                                                  Colors.black.withOpacity(0.1))
+                                        ],
+                                      ),
+                                      child: TextField(
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        controller: textEditingController,
+                                        onChanged: (value) => surveyTakeProvider
+                                            .changeNumberAnswer(value),
+                                        maxLines: currentQuestionType ==
+                                                QuestionType.TEXTAREA
+                                            ? null
+                                            : 1,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.all(10),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 );
                               } else if (currentQuestionType ==
                                   QuestionType.RADIO) {
@@ -149,7 +206,7 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                           color: currentQuestion
                                                       .options[index].option ==
                                                   surveyTakeProvider.radioAnswer
-                                              ? AppColor.primaryColor
+                                              ? AppColor.secondaryColor
                                               : Colors.white,
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -170,7 +227,7 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                                             .option ==
                                                         surveyTakeProvider
                                                             .radioAnswer
-                                                    ? AppColor.primaryColor
+                                                    ? AppColor.secondaryColor
                                                     : Colors.white,
                                                 boxShadow: [
                                                   BoxShadow(
@@ -182,7 +239,8 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                                     BorderRadius.circular(10),
                                                 border: Border.all(
                                                   width: 2,
-                                                  color: AppColor.primaryColor,
+                                                  color:
+                                                      AppColor.secondaryColor,
                                                 ),
                                               ),
                                               child: index ==
@@ -206,7 +264,7 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                                                       .option
                                                               ? Colors.white
                                                               : AppColor
-                                                                  .primaryColor),
+                                                                  .secondaryColor),
                                                       onChanged: (value) =>
                                                           surveyTakeProvider
                                                               .changeOtherRadioAnswer(
@@ -228,7 +286,7 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                                                         .option
                                                                 ? Colors.white
                                                                 : AppColor
-                                                                    .primaryColor),
+                                                                    .secondaryColor),
                                                         hintText:
                                                             currentQuestion
                                                                 .options[index]
@@ -252,7 +310,7 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                                                       .radioAnswer
                                                               ? Colors.white
                                                               : AppColor
-                                                                  .primaryColor),
+                                                                  .secondaryColor),
                                                     ),
                                             ),
                                           ),
@@ -304,6 +362,53 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                         }),
                                   ],
                                 );
+                              } else if (currentQuestionType ==
+                                  QuestionType.DATE) {
+                                return Column(
+                                  children: [
+                                    if (surveyTakeProvider.dateTimeAnswer !=
+                                        null)
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Waktu terpilih",
+                                                style: AppTextStyle.body2
+                                                    .setBold(),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                  surveyTakeProvider
+                                                          .dateTimeAnswer ??
+                                                      "",
+                                                  style: AppTextStyle.body2
+                                                      .setRegular()),
+                                            ],
+                                          ),
+                                          const Divider(),
+                                          const SizedBox(height: 20),
+                                        ],
+                                      ),
+                                    QCEntryButton(
+                                      color: AppColor.secondaryColor,
+                                      title: "Pilih Tanggal",
+                                      onTap: () {
+                                        showDatePicker(
+                                                context: context,
+                                                firstDate: DateTime(
+                                                    DateTime.now().year - 3),
+                                                lastDate: DateTime.now())
+                                            .then((value) {
+                                          if (value != null) {
+                                            surveyTakeProvider
+                                                .changeDateTimeAnswer(value);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                );
                               } else {
                                 return const SizedBox();
                               }
@@ -318,6 +423,7 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                   ),
                   const SizedBox(height: 12),
                   QCEntryButton(
+                    color: AppColor.tertiaryColor,
                     isLoading: surveyTakeProvider.isSubmitLoading,
                     title: "Selanjutnya",
                     onTap: () {

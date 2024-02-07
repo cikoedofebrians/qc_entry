@@ -9,7 +9,7 @@ class Option {
 
   factory Option.fromJson(Map<String, dynamic> json) {
     return Option(
-      skip: json["skip"] != null ? int.parse(json['skip']) : null,
+      skip: json["skip"] != null ? json['skip'] : null,
       option: json['option'],
     );
   }

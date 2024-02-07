@@ -1,43 +1,28 @@
-// To parse this JSON data, do
-//
-//     final survey = surveyFromJson(jsonString);
-import 'dart:convert';
-
-Survey surveyFromJson(String str) => Survey.fromJson(json.decode(str));
-
-String surveyToJson(Survey data) => json.encode(data.toJson());
-
 class Survey {
   final int id;
-  final String title;
-  final bool isTaken;
+  final String judul;
+  final String deskripsi;
 
   Survey({
     required this.id,
-    required this.title,
-    required this.isTaken,
+    required this.judul,
+    required this.deskripsi,
   });
 
   Survey copyWith({
     int? id,
-    String? title,
-    bool? isTaken,
+    String? judul,
+    String? deskripsi,
   }) =>
       Survey(
         id: id ?? this.id,
-        title: title ?? this.title,
-        isTaken: isTaken ?? this.isTaken,
+        judul: judul ?? this.judul,
+        deskripsi: deskripsi ?? this.deskripsi,
       );
 
   factory Survey.fromJson(Map<String, dynamic> json) => Survey(
         id: json["id"],
-        title: json["title"],
-        isTaken: json["is_taken"] ?? false,
+        judul: json["judul"],
+        deskripsi: json['deskripsi'],
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "is_taken": isTaken,
-      };
 }

@@ -65,20 +65,20 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/entryqc-logo-withbg.png"
+  image_path: "assets/images/entryrc-logo-withbg.png"
   # android: true,
   # ios: true
 
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/images/entryqc-logo.png
+  image: assets/images/entryrc-logo.png
   color_dark: "#ffffff"
-  image_dark: assets/images/entryqc-logo.png
+  image_dark: assets/images/entryrc-logo.png
 
   android_12:
-    image: assets/images/entryqc-logo.png
+    image: assets/images/entryrc-logo.png
     icon_background_color: "#ffffff"
-    image_dark: assets/images/entryqc-logo.png
+    image_dark: assets/images/entryrc-logo.png
     icon_background_color_dark: "#ffffff"
   web: false
 # The following section is specific to Flutter packages.

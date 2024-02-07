@@ -3,6 +3,7 @@ import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
+import 'package:qc_entry/presentation/survey/list/component/survey_list_item.dart';
 import 'package:qc_entry/presentation/survey/take/screen/survey_take_page.dart';
 import 'package:qc_entry/presentation/survey/warning/component/warning_item.dart';
 
@@ -13,7 +14,7 @@ class WarningPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int id = ModalRoute.of(context)!.settings.arguments as int;
+    final id = ModalRoute.of(context)!.settings.arguments as SurveyTakeParams;
     List<InterviewRule> interviewRules = [
       InterviewRule(
         key: "A",
@@ -57,11 +58,11 @@ class WarningPage extends StatelessWidget {
             children: [
               Text(
                 "CHEATING/ PELANGGARAN DALAM SURVEY",
-                style: AppTextStyle.heading2
+                style: AppTextStyle.heading4
                     .setSemiBold()
                     .copyWith(color: AppColor.primaryColor),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               ...List.generate(
                 interviewRules.length,
                 (index) => Padding(
@@ -72,7 +73,7 @@ class WarningPage extends StatelessWidget {
                       subtitle: interviewRules[index].subtitle),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               QCEntryButton(
                   title: "Mulai Survey",
                   onTap: () => Navigator.of(context).pushReplacementNamed(

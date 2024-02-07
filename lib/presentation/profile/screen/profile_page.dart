@@ -77,6 +77,8 @@ class ProfileView extends StatelessWidget {
                                     showQCEntrySnackBar(
                                         context: context,
                                         title: "Terjadi kesalahan");
+                                  } else {
+                                    Navigator.pop(context);
                                   }
                                 });
                               },

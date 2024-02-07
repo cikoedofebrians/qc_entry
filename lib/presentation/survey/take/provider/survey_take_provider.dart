@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:qc_entry/data/model/survey/survey_question/survey_question.dart';
 import 'package:qc_entry/data/repository/survey_repository.dart';
 import 'package:qc_entry/data/model/survey/survey_option/survey_option.dart';
@@ -14,13 +15,25 @@ class SurveyTakeProvider extends ChangeNotifier {
   String radioAnswer = "";
   String textAreaAnswer = "";
   String? timeAnswer;
-  DateTime? dateTimeAnswer;
+  String? dateTimeAnswer;
   int? willSkipPage;
   String? otherRadioAnswer;
+  String? numberAnswer;
+
+  List<Map<String, dynamic>> submitBody = [];
 
   int surveyId = 0;
   changeSurveyId(int value) {
     surveyId = value;
+  }
+
+  changeNumberAnswer(String answer) {
+    numberAnswer = answer;
+  }
+
+  changeDateTimeAnswer(DateTime newDateTime) {
+    dateTimeAnswer = DateFormat('dd MMMM yyyy').format(newDateTime);
+    notifyListeners();
   }
 
   changeOtherRadioAnswer(String newValue) {
@@ -51,69 +64,51 @@ class SurveyTakeProvider extends ChangeNotifier {
   }
 
   Future<String?> continueQuestion(BuildContext context) async {
-    bool isError = false;
-
     final currentQuestion = surveyQuestions[currentQuestionIndex];
     if (currentQuestion.type == QuestionType.RADIO) {
       if (radioAnswer.isEmpty) {
         return "Tolong pilih salah satu pilihan yang disediakan";
       }
-      _isSubmitLoading = true;
-      notifyListeners();
       if (radioAnswer == "Lainnya" &&
           otherRadioAnswer != null &&
           otherRadioAnswer!.isNotEmpty) {
-        final response = await surveyRepository.submitOneAnswer(
-            currentQuestion.id, otherRadioAnswer!);
-        response.fold((l) => isError = true, (r) => null);
+        submitBody[currentQuestionIndex]['answer'] = otherRadioAnswer;
       } else {
-        final response = await surveyRepository.submitOneAnswer(
-            currentQuestion.id, radioAnswer);
-        response.fold((l) => isError = true, (r) => null);
+        submitBody[currentQuestionIndex]['answer'] = radioAnswer;
       }
-
-      _isSubmitLoading = false;
-      notifyListeners();
     }
     if (currentQuestion.type == QuestionType.TEXT ||
         currentQuestion.type == QuestionType.TEXTAREA) {
       if (textAreaAnswer.isEmpty) return "Text field tidak boleh kosong";
-      _isSubmitLoading = true;
-      notifyListeners();
-      final response = await surveyRepository.submitOneAnswer(
-          currentQuestion.id, textAreaAnswer);
-      response.fold((l) => isError = true, (r) => null);
-      _isSubmitLoading = false;
-      notifyListeners();
+      submitBody[currentQuestionIndex]['answer'] = textAreaAnswer;
     }
-    // if (currentQuestion.type == QuestionType.DATE) {}
+
+    if (currentQuestion.type == QuestionType.NUMBER) {
+      if (numberAnswer == null) return "Angka tidak boleh kosong";
+      submitBody[currentQuestionIndex]['answer'] = numberAnswer;
+    }
+
     if (currentQuestion.type == QuestionType.TIME) {
       if (timeAnswer == null) return "Jam tidak boleh kosong";
-      _isSubmitLoading = true;
-      notifyListeners();
-      final response = await surveyRepository.submitOneAnswer(
-          currentQuestion.id, timeAnswer!);
-      response.fold((l) => isError = true, (r) => null);
-      _isSubmitLoading = false;
-      notifyListeners();
+      submitBody[currentQuestionIndex]['answer'] = timeAnswer;
     }
 
-    if (isError) return "Terjadi kesalahan";
+    if (currentQuestion.type == QuestionType.DATE) {
+      submitBody[currentQuestionIndex]['answer'] = dateTimeAnswer;
+    }
 
-    if (willSkipPage != null) {
+    if (currentQuestionIndex == surveyQuestions.length - 1) {
+      final response = await surveyRepository.submitAnswer(submitBody);
+      String message = "";
+      response.fold((l) => message = l.message, (r) => message = "complete");
+      return message;
+    } else if (willSkipPage != null) {
       currentQuestionIndex = willSkipPage! - 1;
-      notifyListeners();
-      resetQuestion();
-      return null;
-    }
-
-    resetQuestion();
-    if (currentQuestionIndex == (surveyQuestions.length - 1)) {
-      surveyRepository.finishSurvey(surveyId);
-      return "complete";
     } else {
       currentQuestionIndex += 1;
     }
+    resetQuestion();
+    notifyListeners();
     return null;
   }
 
@@ -136,6 +131,13 @@ class SurveyTakeProvider extends ChangeNotifier {
 
     response.fold((l) => null, (r) {
       surveyQuestions = r.data;
+
+      for (var i in r.data) {
+        submitBody.add({
+          'survey_question_id': i.id,
+          'answer': null,
+        });
+      }
     });
 
     setLoading(false);

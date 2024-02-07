@@ -1,5 +1,7 @@
 import 'package:qc_entry/presentation/auth/login/screen/login_page.dart';
 import 'package:qc_entry/presentation/home/screen/home_page.dart';
+import 'package:qc_entry/presentation/real_count/partai/screen/partai_screen.dart';
+import 'package:qc_entry/presentation/real_count/pilleg/screen/pilleg_page.dart';
 import 'package:qc_entry/presentation/real_count/pilpres/screen/pilpres_page.dart';
 import 'package:qc_entry/presentation/real_count/real_count_list/screen/real_count_list.dart';
 import 'package:qc_entry/presentation/survey/complete/screen/complete_page.dart';
@@ -16,4 +18,6 @@ final route = {
   SurveyTakePage.route: (context) => const SurveyTakePage(),
   RealCountListPage.route: (context) => const RealCountListPage(),
   PilpresPage.route: (context) => const PilpresPage(),
+  PartaiPage.route: (context) => const PartaiPage(),
+  PillegPage.route: (context) => const PillegPage(),
 };

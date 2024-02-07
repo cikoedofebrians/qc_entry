@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:qc_entry/data/model/realcount/caleg/caleg_model.dart';
 import 'package:qc_entry/data/model/realcount/dapil/dapil_model.dart';
 import 'package:qc_entry/data/model/realcount/partai/partai_model.dart';
 import 'package:qc_entry/data/repository/raelcount_repository.dart';
 
-class PartaiProvider extends ChangeNotifier {
-  PartaiProvider(this.realcountRepository);
+class PillegProvider extends ChangeNotifier {
+  PillegProvider(this.realcountRepository);
   final RealcountRepository realcountRepository;
-  List<Partai> partaiList = [];
 
+  List<Partai> partaiList = [];
   bool isLoading = false;
   List<Dapil> dapilList = [];
   int? selectedDapilIndex;
   int? selectedKelurahanIndex;
+  int? selectedPartaiIndex;
   String unsuccessfulVotes = "";
   String tps = "";
   String enumeratorNotes = "";
+
+  List<Caleg> calegList = [];
 
   Future<String?> getData() async {
     isLoading = true;
@@ -51,6 +55,20 @@ class PartaiProvider extends ChangeNotifier {
     return errorMessage;
   }
 
+  setSelectedPartaiIndex(int newIndex) {
+    selectedPartaiIndex = newIndex;
+    notifyListeners();
+    if (selectedDapilIndex != null && selectedKelurahanIndex != null) {
+      getAllCaleg();
+    }
+  }
+
+  changePresidentVoiceCount(int index, String newVoice) {
+    final newCaleg = calegList[index].copyWith(suara: newVoice);
+    calegList[index] = newCaleg;
+    notifyListeners();
+  }
+
   setTPS(String newTPS) {
     tps = newTPS;
   }
@@ -59,50 +77,65 @@ class PartaiProvider extends ChangeNotifier {
     unsuccessfulVotes = newVotes;
   }
 
-  changePresidentVoiceCount(int index, String newVoice) {
-    final newPartai = partaiList[index].copyWith(suara: newVoice);
-    partaiList[index] = newPartai;
-    notifyListeners();
-  }
-
   setSelectedDapilIndex(int? newIndex) {
     selectedDapilIndex = newIndex;
+    setCalegList([]);
     notifyListeners();
   }
 
   setSelectedKelurahanIndex(int? newIndex) {
     selectedKelurahanIndex = newIndex;
+    if (selectedPartaiIndex != null && newIndex != null) {
+      getAllCaleg();
+    }
   }
 
   setEnumeratorNotes(String newNotes) {
     enumeratorNotes = newNotes;
   }
 
-  Future<String?> submitPartai() async {
+  setCalegList(List<Caleg> newCalegList) {
+    calegList = newCalegList;
+
+    notifyListeners();
+  }
+
+  getAllCaleg() async {
+    final result = await realcountRepository.getAllCaleg(
+        partaiId: partaiList[selectedPartaiIndex!].id,
+        dapilId: dapilList[selectedDapilIndex!].id);
+    result.fold((l) => null, (r) {
+      setCalegList(r);
+    });
+  }
+
+  Future<String?> submitPilleg() async {
     if (selectedDapilIndex == null) return "Dapil tidak boleh kosong";
     if (selectedKelurahanIndex == null) return "Kelurahan tidak boleh kosong";
+    if (selectedPartaiIndex == null) return "Partai tidak boleh kosong";
+
     if (tps.isEmpty) return "TPS tidak boleh kosong";
-    for (var partai in partaiList) {
-      if (partai.suara.isEmpty) {
-        return "Suara partai tidak boleh ada yang kosong";
+    for (var caleg in calegList) {
+      if (caleg.suara.isEmpty) {
+        return "Suara legislatif tidak boleh ada yang kosong";
       }
     }
     if (unsuccessfulVotes.isEmpty) {
-      return "Suara partai tidak boleh ada yang kosong";
+      return "Suara legislatif tidak boleh ada yang kosong";
     }
     if (enumeratorNotes.isEmpty) {
       return "Catatan enumerator tidak boleh kosong";
     }
-    final List<Map<String, int>> hasilSuaraSah = partaiList
+    final List<Map<String, int>> hasilSuaraSah = calegList
         .map(
           (e) => {
-            'partai_id': e.id,
+            'caleg_id': e.id,
             'jumlah_suara': int.parse(e.suara),
           },
         )
         .toList();
 
-    final result = await realcountRepository.submitPilpar(
+    final result = await realcountRepository.submitPilleg(
       dapilId: dapilList[selectedDapilIndex!].id,
       kelurahan:
           dapilList[selectedDapilIndex!].kelurahan[selectedKelurahanIndex!],

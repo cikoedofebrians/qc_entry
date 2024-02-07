@@ -38,7 +38,7 @@ class LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "assets/images/entryqc-logo.png",
+                  "assets/images/entryrc-logo.png",
                   width: 320,
                   height: 320,
                 ),

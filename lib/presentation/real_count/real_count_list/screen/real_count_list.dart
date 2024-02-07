@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
+import 'package:qc_entry/presentation/real_count/partai/screen/partai_screen.dart';
+import 'package:qc_entry/presentation/real_count/pilleg/screen/pilleg_page.dart';
 import 'package:qc_entry/presentation/real_count/pilpres/screen/pilpres_page.dart';
 
 class RealCountListPage extends StatelessWidget {
@@ -38,10 +40,10 @@ class RealCountListView extends StatelessWidget {
                 route: PilpresPage.route, title: "Pemilihan Presiden"),
             const SizedBox(height: 12),
             const _RealCountListItem(
-                route: "pilpres", title: "Pemilihan Partai"),
+                route: PartaiPage.route, title: "Pemilihan Partai"),
             const SizedBox(height: 12),
             const _RealCountListItem(
-                route: "pilpres", title: "Pemilihan Legislatif"),
+                route: PillegPage.route, title: "Pemilihan Legislatif"),
             const Spacer(),
           ],
         ),
@@ -59,7 +61,7 @@ class _RealCountListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(10),
-      onTap: () => Navigator.of(context).pushNamed(PilpresPage.route),
+      onTap: () => Navigator.of(context).pushNamed(route),
       child: Ink(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:qc_entry/data/model/survey/survey_category/survey_category.dart';
@@ -10,8 +12,6 @@ class SurveyQuestion {
   final String? question;
   final QuestionType type;
   final List<Option> options;
-  final DateTime createdAt;
-  final DateTime updatedAt;
   final SurveyCategory surveyCategory;
 
   SurveyQuestion({
@@ -21,8 +21,6 @@ class SurveyQuestion {
     required this.question,
     required this.type,
     required this.options,
-    required this.createdAt,
-    required this.updatedAt,
     required this.surveyCategory,
   });
 
@@ -44,8 +42,6 @@ class SurveyQuestion {
         question: json["question"],
         type: typeValues.map[json["type"]]!,
         options: optionList,
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
         surveyCategory: SurveyCategory.fromJson(json['survey_category']));
   }
 
@@ -56,19 +52,25 @@ class SurveyQuestion {
         "question": question,
         "type": typeValues.reverse[type],
         "options": options,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
       };
 }
 
-// ignore: constant_identifier_names
-enum QuestionType { RADIO, TEXT, TEXTAREA, TIME }
+enum QuestionType {
+  RADIO,
+  TEXT,
+  TEXTAREA,
+  TIME,
+  DATE,
+  NUMBER,
+}
 
 final typeValues = EnumValues({
   "radio": QuestionType.RADIO,
   "text": QuestionType.TEXT,
+  "number": QuestionType.NUMBER,
   "textarea": QuestionType.TEXTAREA,
-  "time": QuestionType.TIME
+  "time": QuestionType.TIME,
+  "date": QuestionType.DATE,
 });
 
 class EnumValues<T> {

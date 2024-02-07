@@ -110,6 +110,7 @@ class PilpresProvider extends ChangeNotifier {
       tps: tps,
       hasilSuaraSah: hasilSuaraSah,
       hasilSuaraTidakSah: int.parse(unsuccessfulVotes),
+      notes: enumeratorNotes,
     );
     String? isError;
 

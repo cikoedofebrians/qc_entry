@@ -15,10 +15,12 @@ class SurveyRepository {
   Future<Either<Failure, List<Survey>>> getSurveyList() async {
     try {
       final response = await _dio.get(surveyUrl);
+
       List<Survey> surveyList = [];
       for (var survey in response.data['data']) {
         surveyList.add(Survey.fromJson(survey));
       }
+
       return Right(surveyList);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
@@ -46,16 +48,12 @@ class SurveyRepository {
     }
   }
 
-  Future<Either<Failure, void>> submitOneAnswer(
-    int id,
-    String answer,
-  ) async {
+  Future<Either<Failure, void>> submitAnswer(
+      List<Map<String, dynamic>> answers) async {
     try {
       final response = await _dio.post(
-        answerSurveyUrl(
-          id.toString(),
-        ),
-        data: {"answer": answer},
+        answerSurveyUrl,
+        data: {"answers": answers},
       );
       if (response.statusCode != 200) {
         throw Exception();

@@ -27,7 +27,7 @@ class Partai {
   factory Partai.fromJson(Map<String, dynamic> json) => Partai(
         id: json["id"],
         nama: json["nama"],
-        media: json["media"]["original_url"],
+        media: json["media"][0]["original_url"],
       );
 
   Map<String, dynamic> toJson() => {

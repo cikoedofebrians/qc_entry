@@ -10,16 +10,19 @@ class VoiceTextField extends StatelessWidget {
     this.onChange,
     this.onChangeNormal,
     this.index,
+    this.leading,
   });
 
   final String label;
   final int? index;
   final Function(int, String)? onChange;
   final Function(String)? onChangeNormal;
+  final Widget? leading;
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
+        if (leading != null) leading!,
         Expanded(
           child: Text(
             label,

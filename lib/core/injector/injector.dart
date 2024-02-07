@@ -9,6 +9,8 @@ import 'package:qc_entry/data/repository/raelcount_repository.dart';
 import 'package:qc_entry/data/repository/survey_repository.dart';
 import 'package:qc_entry/presentation/auth/provider/auth_provider.dart';
 import 'package:qc_entry/presentation/profile/provider/profile_provider.dart';
+import 'package:qc_entry/presentation/real_count/partai/provider/partai_provider.dart';
+import 'package:qc_entry/presentation/real_count/pilleg/provider/pilleg_provider.dart';
 import 'package:qc_entry/presentation/real_count/pilpres/provider/pilpres_provider.dart';
 import 'package:qc_entry/presentation/survey/list/provider/survey_list_provider.dart';
 import 'package:qc_entry/presentation/survey/take/provider/survey_take_provider.dart';
@@ -41,4 +43,6 @@ Future<void> configureDependencies() async {
   // REALCOUNT
   getIt.registerFactory(() => RealcountRepository(getIt<DioClient>()));
   getIt.registerFactory(() => PilpresProvider(getIt<RealcountRepository>()));
+  getIt.registerFactory(() => PartaiProvider(getIt<RealcountRepository>()));
+  getIt.registerFactory(() => PillegProvider(getIt<RealcountRepository>()));
 }
