@@ -157,35 +157,43 @@ class _PartaiViewState extends State<PartaiView> {
                         height: 24,
                       ),
                       Text(
-                        "Suara per Legislatif",
+                        "Suara Calon Legislatif",
                         style: AppTextStyle.heading5
                             .setSemiBold()
                             .copyWith(color: AppColor.secondaryColor),
                       ),
                       const SizedBox(height: 20),
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => VoiceTextField(
-                            leading: Padding(
-                              padding: const EdgeInsets.only(right: 12),
-                              child: CircleAvatar(
-                                backgroundColor: AppColor.quaternaryColor,
-                                child: Text(
-                                  pillegProvider.calegList[index].noUrut,
-                                  style: AppTextStyle.body2
-                                      .setSemiBold()
-                                      .copyWith(color: AppColor.primaryColor),
-                                ),
-                              ),
+                      pillegProvider.isFetchLoading
+                          ? const Center(
+                              child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              child: CircularProgressIndicator(),
+                            ))
+                          : ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) => VoiceTextField(
+                                  leading: Padding(
+                                    padding: const EdgeInsets.only(right: 12),
+                                    child: CircleAvatar(
+                                      backgroundColor: AppColor.secondaryColor,
+                                      radius: 18,
+                                      child: Text(
+                                        pillegProvider.calegList[index].noUrut,
+                                        style: AppTextStyle.body2
+                                            .setSemiBold()
+                                            .copyWith(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                  label: pillegProvider.calegList[index].nama,
+                                  onChange:
+                                      pillegProvider.changePresidentVoiceCount,
+                                  index: index),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 12),
+                              itemCount: pillegProvider.calegList.length,
                             ),
-                            label: pillegProvider.calegList[index].nama,
-                            onChange: pillegProvider.changePresidentVoiceCount,
-                            index: index),
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 12),
-                        itemCount: pillegProvider.calegList.length,
-                      ),
                       const Divider(),
                       VoiceTextField(
                         label: "Suara Tidak Sah",
@@ -196,6 +204,7 @@ class _PartaiViewState extends State<PartaiView> {
                           onChange: pillegProvider.setEnumeratorNotes),
                       const SizedBox(height: 24),
                       QCEntryButton(
+                        color: AppColor.tertiaryColor,
                         isLoading: pillegProvider.isSubmitLoading,
                         title: "Kirim",
                         onTap: () {

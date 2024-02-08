@@ -141,7 +141,7 @@ class _PartaiViewState extends State<PartaiView> {
                         height: 24,
                       ),
                       Text(
-                        "Suara per Partai",
+                        "Suara Partai",
                         style: AppTextStyle.heading5
                             .setSemiBold()
                             .copyWith(color: AppColor.secondaryColor),
@@ -154,13 +154,14 @@ class _PartaiViewState extends State<PartaiView> {
                             leading: Padding(
                               padding: const EdgeInsets.only(right: 12),
                               child: CircleAvatar(
-                                backgroundColor: AppColor.quaternaryColor,
+                                radius: 18,
+                                backgroundColor: AppColor.secondaryColor,
                                 child: Text(
                                   partaiProvider.partaiList[index].id
                                       .toString(),
                                   style: AppTextStyle.body2
                                       .setSemiBold()
-                                      .copyWith(color: AppColor.primaryColor),
+                                      .copyWith(color: Colors.white),
                                 ),
                               ),
                             ),
@@ -181,6 +182,7 @@ class _PartaiViewState extends State<PartaiView> {
                           onChange: partaiProvider.setEnumeratorNotes),
                       const SizedBox(height: 24),
                       QCEntryButton(
+                        color: AppColor.tertiaryColor,
                         isLoading: partaiProvider.isSubmitLoading,
                         title: "Kirim",
                         onTap: () {

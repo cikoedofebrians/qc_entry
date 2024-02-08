@@ -24,6 +24,7 @@ class PillegProvider extends ChangeNotifier {
   }
 
   bool isSubmitLoading = false;
+  bool isFetchLoading = false;
 
   setSubmitLoading(bool newValue) {
     isSubmitLoading = newValue;
@@ -113,10 +114,16 @@ class PillegProvider extends ChangeNotifier {
   }
 
   getAllCaleg() async {
+    isFetchLoading = true;
+    notifyListeners();
     final result = await realcountRepository.getAllCaleg(
         partaiId: partaiList[selectedPartaiIndex!].id,
         dapilId: dapilList[selectedDapilIndex!].id);
-    result.fold((l) => null, (r) {
+    result.fold((l) {
+      isFetchLoading = false;
+      notifyListeners();
+    }, (r) {
+      isFetchLoading = false;
       setCalegList(r);
     });
   }
@@ -130,11 +137,11 @@ class PillegProvider extends ChangeNotifier {
     if (tps.isEmpty) return "TPS tidak boleh kosong";
     for (var caleg in calegList) {
       if (caleg.suara.isEmpty) {
-        return "Suara legislatif tidak boleh ada yang kosong";
+        return "Suara calon legislatif tidak boleh ada yang kosong";
       }
     }
     if (unsuccessfulVotes.isEmpty || calegList.isEmpty) {
-      return "Suara legislatif tidak boleh ada yang kosong";
+      return "Suara calon legislatif tidak boleh ada yang kosong";
     }
     if (enumeratorNotes.isEmpty) {
       return "Catatan enumerator tidak boleh kosong";

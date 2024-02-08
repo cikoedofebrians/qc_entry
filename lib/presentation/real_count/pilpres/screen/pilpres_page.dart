@@ -141,7 +141,7 @@ class _PilpresViewState extends State<PilpresView> {
                         height: 24,
                       ),
                       Text(
-                        "Suara per Presiden",
+                        "Suara Paslon Capres - Cawapres",
                         style: AppTextStyle.heading5
                             .setSemiBold()
                             .copyWith(color: AppColor.secondaryColor),
@@ -154,13 +154,14 @@ class _PilpresViewState extends State<PilpresView> {
                             leading: Padding(
                               padding: const EdgeInsets.only(right: 12),
                               child: CircleAvatar(
-                                backgroundColor: AppColor.quaternaryColor,
+                                radius: 18,
+                                backgroundColor: AppColor.secondaryColor,
                                 child: Text(
                                   pilpresProvider
                                       .capresList[index].noUrutPaslon,
                                   style: AppTextStyle.body2
                                       .setSemiBold()
-                                      .copyWith(color: AppColor.primaryColor),
+                                      .copyWith(color: Colors.white),
                                 ),
                               ),
                             ),
@@ -181,6 +182,7 @@ class _PilpresViewState extends State<PilpresView> {
                           onChange: pilpresProvider.setEnumeratorNotes),
                       const SizedBox(height: 24),
                       QCEntryButton(
+                        color: AppColor.tertiaryColor,
                         isLoading: pilpresProvider.isSubmitLoading,
                         title: "Kirim",
                         onTap: () {

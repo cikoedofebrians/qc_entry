@@ -38,6 +38,7 @@ class HomeView extends StatelessWidget {
       ),
       body: pageList[homeProvider.currentPage],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppColor.primaryColor,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
@@ -52,7 +53,8 @@ class HomeView extends StatelessWidget {
             label: "Profil",
           ),
         ],
-        selectedItemColor: AppColor.primaryColor,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey.shade600,
         currentIndex: homeProvider.currentPage,
         onTap: (selectedPage) => homeProvider.setCurrentPage(selectedPage),
       ),

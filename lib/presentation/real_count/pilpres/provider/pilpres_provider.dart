@@ -99,11 +99,11 @@ class PilpresProvider extends ChangeNotifier {
 
     for (var capres in capresList) {
       if (capres.suara.isEmpty) {
-        return "Suara presiden tidak boleh ada yang kosong";
+        return "Suara calon presiden tidak boleh ada yang kosong";
       }
     }
     if (unsuccessfulVotes.isEmpty) {
-      return "Suara presiden tidak boleh ada yang kosong";
+      return "Suara calon presiden tidak boleh ada yang kosong";
     }
     if (enumeratorNotes.isEmpty) {
       return "Catatan enumerator tidak boleh kosong";

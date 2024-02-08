@@ -34,12 +34,20 @@ class ProfileView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Profil",
-            style: AppTextStyle.heading2
-                .setSemiBold()
-                .copyWith(color: AppColor.primaryColor),
-          ),
+          Row(children: [
+            const Icon(
+              Icons.account_circle_rounded,
+              size: 40,
+              color: AppColor.primaryColor,
+            ),
+            const SizedBox(width: 12),
+            Text(
+              "Profil",
+              style: AppTextStyle.heading2
+                  .setSemiBold()
+                  .copyWith(color: AppColor.primaryColor),
+            ),
+          ]),
           const SizedBox(height: 24),
           ProfileItem(left: "Nama", right: profileProvider.user?.name ?? "-"),
           ProfileItem(left: "Email", right: profileProvider.user?.email ?? "-"),

@@ -32,8 +32,12 @@ class VoiceTextField extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        SizedBox(
-          width: 42,
+        Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: AppColor.quaternaryColor),
+          width: 44,
           child: TextField(
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
