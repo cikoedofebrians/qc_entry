@@ -31,6 +31,7 @@ class RealCountListView extends StatelessWidget {
           children: [
             Text(
               "Real Count Pemilu 2024",
+              textAlign: TextAlign.center,
               style: AppTextStyle.heading3.setSemiBold().copyWith(
                     color: AppColor.primaryColor,
                   ),

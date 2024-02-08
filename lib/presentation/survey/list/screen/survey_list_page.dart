@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/injector/injector.dart';
@@ -26,6 +27,7 @@ class SurveyListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final surveyListProvider = Provider.of<SurveyListProvider>(context);
+    final phoneWidth = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Daftar Survey"),
@@ -35,16 +37,29 @@ class SurveyListView extends StatelessWidget {
               child: CircularProgressIndicator(),
             )
           : surveyListProvider.surveyList.isEmpty
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      "Tidak ada survey yang tersedia untuk sekarang",
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.heading5
-                          .setSemiBold()
-                          .copyWith(color: AppColor.primaryColor),
-                    ),
+              ? Container(
+                  width: phoneWidth,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/images/empty-box.svg",
+                        height: phoneWidth * 0.5,
+                        width: phoneWidth * 0.5,
+                        fit: BoxFit.scaleDown,
+                        colorFilter: const ColorFilter.mode(
+                            AppColor.primaryColor, BlendMode.srcIn),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        "Tidak ada survey yang tersedia untuk sekarang",
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.heading5
+                            .setSemiBold()
+                            .copyWith(color: AppColor.primaryColor),
+                      ),
+                    ],
                   ),
                 )
               : ListView.separated(
