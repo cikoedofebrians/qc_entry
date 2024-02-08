@@ -133,7 +133,7 @@ class PillegProvider extends ChangeNotifier {
         return "Suara legislatif tidak boleh ada yang kosong";
       }
     }
-    if (unsuccessfulVotes.isEmpty) {
+    if (unsuccessfulVotes.isEmpty || calegList.isEmpty) {
       return "Suara legislatif tidak boleh ada yang kosong";
     }
     if (enumeratorNotes.isEmpty) {

@@ -26,11 +26,12 @@ class VoiceTextField extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: AppTextStyle.body1
+            style: AppTextStyle.body2
                 .setSemiBold()
                 .copyWith(color: AppColor.primaryColor),
           ),
         ),
+        const SizedBox(width: 12),
         SizedBox(
           width: 42,
           child: TextField(

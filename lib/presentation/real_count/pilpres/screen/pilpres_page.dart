@@ -151,6 +151,19 @@ class _PilpresViewState extends State<PilpresView> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) => VoiceTextField(
+                            leading: Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: CircleAvatar(
+                                backgroundColor: AppColor.quaternaryColor,
+                                child: Text(
+                                  pilpresProvider
+                                      .capresList[index].noUrutPaslon,
+                                  style: AppTextStyle.body2
+                                      .setSemiBold()
+                                      .copyWith(color: AppColor.primaryColor),
+                                ),
+                              ),
+                            ),
                             label: pilpresProvider.capresList[index].namaPaslon,
                             onChange: pilpresProvider.changePresidentVoiceCount,
                             index: index),

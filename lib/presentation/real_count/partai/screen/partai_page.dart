@@ -151,6 +151,19 @@ class _PartaiViewState extends State<PartaiView> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) => VoiceTextField(
+                            leading: Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: CircleAvatar(
+                                backgroundColor: AppColor.quaternaryColor,
+                                child: Text(
+                                  partaiProvider.partaiList[index].id
+                                      .toString(),
+                                  style: AppTextStyle.body2
+                                      .setSemiBold()
+                                      .copyWith(color: AppColor.primaryColor),
+                                ),
+                              ),
+                            ),
                             label: partaiProvider.partaiList[index].nama,
                             onChange: partaiProvider.changePresidentVoiceCount,
                             index: index),

@@ -172,7 +172,11 @@ class _PartaiViewState extends State<PartaiView> {
                               child: CircleAvatar(
                                 backgroundColor: AppColor.quaternaryColor,
                                 child: Text(
-                                    pillegProvider.calegList[index].noUrut),
+                                  pillegProvider.calegList[index].noUrut,
+                                  style: AppTextStyle.body2
+                                      .setSemiBold()
+                                      .copyWith(color: AppColor.primaryColor),
+                                ),
                               ),
                             ),
                             label: pillegProvider.calegList[index].nama,
