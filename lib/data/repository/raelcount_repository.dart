@@ -24,7 +24,8 @@ class RealcountRepository {
       return Right(dapilList);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -42,7 +43,8 @@ class RealcountRepository {
       return Right(partaiList);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -62,7 +64,8 @@ class RealcountRepository {
       return Right(calegList);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -80,7 +83,8 @@ class RealcountRepository {
       return Right(capresList);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -110,7 +114,8 @@ class RealcountRepository {
       return const Right(null);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -140,7 +145,8 @@ class RealcountRepository {
       return const Right(null);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -153,7 +159,6 @@ class RealcountRepository {
     required String kelurahan,
     required String tps,
     required List<Map<String, int>> hasilSuaraSah,
-    required int hasilSuaraTidakSah,
     required String notes,
     required int jumlahDPT,
   }) async {
@@ -163,14 +168,15 @@ class RealcountRepository {
         'kelurahan': kelurahan,
         'tps': tps,
         'hasil_suara_sah': hasilSuaraSah,
-        'hasil_suara_tidak_sah': hasilSuaraTidakSah,
+        'hasil_suara_tidak_sah': 0,
         'laporan': notes,
         'jumlah_dpt': jumlahDPT,
       });
       return const Right(null);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {

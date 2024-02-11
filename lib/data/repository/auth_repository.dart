@@ -22,7 +22,8 @@ class AuthRepository {
       return const Right(null);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -37,23 +38,12 @@ class AuthRepository {
       return Right(user);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
-      return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
-    } catch (_) {
-      return const Left(ParsingFailure("Terjadi kesalahan"));
-    }
-  }
-
-  Future<Either<Failure, void>> logout() async {
-    try {
-      await dio.post(logoutUrl);
-      return const Right(null);
-    } on DioException catch (e) {
-      final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
-    } on NetworkException catch (_) {
-      return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
+      return const Left(NetworkFailure(
+        "Tidak bisa terhubung keinternet",
+      ));
     } catch (_) {
       return const Left(ParsingFailure("Terjadi kesalahan"));
     }

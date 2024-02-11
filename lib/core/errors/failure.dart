@@ -10,7 +10,8 @@ class NetworkFailure extends Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure(message) : super(message);
+  final int? statusCode;
+  const ServerFailure(message, this.statusCode) : super(message);
 }
 
 class CacheFailure extends Failure {

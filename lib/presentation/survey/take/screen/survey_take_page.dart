@@ -6,7 +6,7 @@ import 'package:qc_entry/core/injector/injector.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
 import 'package:qc_entry/data/model/survey/survey_question/survey_question.dart';
-import 'package:qc_entry/presentation/shared/custom_.dart';
+import 'package:qc_entry/presentation/shared/custom_snackbar.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
 import 'package:qc_entry/presentation/survey/complete/screen/complete_page.dart';
 import 'package:qc_entry/presentation/survey/list/component/survey_list_item.dart';

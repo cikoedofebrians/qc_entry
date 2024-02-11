@@ -5,7 +5,7 @@ import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
 import 'package:qc_entry/presentation/auth/login/provider/login_provider.dart';
 import 'package:qc_entry/presentation/auth/provider/auth_provider.dart';
-import 'package:qc_entry/presentation/shared/custom_.dart';
+import 'package:qc_entry/presentation/shared/custom_snackbar.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
 import 'package:qc_entry/presentation/shared/custom_text_field.dart';
 

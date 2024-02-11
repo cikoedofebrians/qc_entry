@@ -4,6 +4,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:qc_entry/core/network/dio_client.dart';
 import 'package:qc_entry/core/network/network_info.dart';
 import 'package:qc_entry/core/service/token_service.dart';
+import 'package:qc_entry/data/repository/app_repository.dart';
 import 'package:qc_entry/data/repository/auth_repository.dart';
 import 'package:qc_entry/data/repository/raelcount_repository.dart';
 import 'package:qc_entry/data/repository/survey_repository.dart';
@@ -39,6 +40,9 @@ Future<void> configureDependencies() async {
   getIt.registerFactory(() => SurveyListProvider(getIt<SurveyRepository>()));
 
   getIt.registerFactory(() => SurveyTakeProvider(getIt<SurveyRepository>()));
+
+  //APP
+  getIt.registerFactory(() => AppRepository(getIt<DioClient>()));
 
   // REALCOUNT
   getIt.registerFactory(() => RealcountRepository(getIt<DioClient>()));

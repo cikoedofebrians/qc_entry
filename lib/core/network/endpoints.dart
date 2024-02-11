@@ -1,13 +1,14 @@
 // ignore_for_file: constant_identifier_names
 
 const String BASE_URL = "https://entryqc.id/api";
-// const String BASE_URL = "http://127.0.0.1:8000/api";
 const String CONTENT_TYPE = "application/json";
+const String APP_VERSION = "1.0.0";
 
 // AUTH
 const String loginUrl = "/auth/login";
 const String logoutUrl = "/auth/logout";
 const String meUrl = '/auth/me';
+const String versionUrl = '/version/check';
 
 // QUESTION
 const String surveyUrl = '/survey';

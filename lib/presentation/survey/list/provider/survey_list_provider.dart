@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qc_entry/core/errors/failure.dart';
 import 'package:qc_entry/data/model/survey/survey/survey_model.dart';
 import 'package:qc_entry/data/repository/survey_repository.dart';
-import 'package:qc_entry/presentation/shared/custom_.dart';
 
 class SurveyListProvider extends ChangeNotifier {
   SurveyListProvider(this.surveyRepository);
@@ -17,15 +17,14 @@ class SurveyListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  fetchSurveyList(BuildContext context) async {
+  Future<Failure?> fetchSurveyList(BuildContext context) async {
     setLoading(true);
     final response = await surveyRepository.getSurveyList();
-    response.fold(
-        (l) =>
-            showQCEntrySnackBar(context: context, title: "Terjadi kesalahan"),
-        (r) {
+    Failure? failure;
+    response.fold((l) => failure = l, (r) {
       _surveyList = r;
     });
     setLoading(false);
+    return failure;
   }
 }

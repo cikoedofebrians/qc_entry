@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qc_entry/core/errors/error_handler.dart';
 import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/injector/injector.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
@@ -7,7 +8,7 @@ import 'package:qc_entry/core/theme/app_text.dart';
 import 'package:qc_entry/presentation/real_count/pilpres/provider/pilpres_provider.dart';
 import 'package:qc_entry/presentation/real_count/shared/enumerator_notes.dart';
 import 'package:qc_entry/presentation/real_count/shared/voice_text_field.dart';
-import 'package:qc_entry/presentation/shared/custom_.dart';
+import 'package:qc_entry/presentation/shared/custom_snackbar.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
 import 'package:qc_entry/presentation/shared/custom_dropdown.dart';
 import 'package:qc_entry/presentation/survey/complete/screen/complete_page.dart';
@@ -21,11 +22,7 @@ class PilpresPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => getIt<PilpresProvider>()
-          ..getData().then((value) {
-            if (value != null) {
-              showQCEntrySnackBar(context: context, title: value);
-            }
-          }),
+          ..getData().then((value) => errorHandler(value, context, true)),
         child: const PilpresView());
   }
 }

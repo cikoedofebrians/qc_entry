@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qc_entry/core/errors/error_handler.dart';
 import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/injector/injector.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
@@ -7,7 +8,7 @@ import 'package:qc_entry/core/theme/app_text.dart';
 import 'package:qc_entry/presentation/auth/provider/auth_provider.dart';
 import 'package:qc_entry/presentation/profile/component/profile_item.dart';
 import 'package:qc_entry/presentation/profile/provider/profile_provider.dart';
-import 'package:qc_entry/presentation/shared/custom_.dart';
+import 'package:qc_entry/presentation/shared/custom_snackbar.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -16,7 +17,9 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => getIt<ProfileProvider>()..fetchUsers(context),
+      create: (context) => getIt<ProfileProvider>()
+        ..fetchUsers(context)
+            .then((value) => errorHandler(value, context, false)),
       child: const ProfileView(),
     );
   }
@@ -52,10 +55,8 @@ class ProfileView extends StatelessWidget {
           ProfileItem(left: "Nama", right: profileProvider.user?.name ?? "-"),
           ProfileItem(left: "Email", right: profileProvider.user?.email ?? "-"),
           ProfileItem(
-              left: "No Telepon",
-              right: profileProvider.user?.userCredential?.phoneNumber ?? "-"),
-          ProfileItem(
-              left: "Peran", right: profileProvider.user?.roles[0].name ?? "-"),
+              left: "No Telepon", right: profileProvider.user?.telepon ?? "-"),
+          ProfileItem(left: "Peran", right: profileProvider.user?.role ?? "-"),
           const Spacer(),
           QCEntryButton(
             title: "Keluar",

@@ -22,10 +22,14 @@ class ProfileItem extends StatelessWidget {
               left,
               style: AppTextStyle.body2.setBold(),
             ),
-            const Spacer(),
-            Text(
-              right,
-              style: AppTextStyle.body2.setRegular(),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                right,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.body2.setRegular(),
+              ),
             ),
           ],
         ),

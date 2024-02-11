@@ -14,7 +14,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (context) => getIt<AuthProvider>()..checkSignInStatus())
+          create: (context) => getIt<AuthProvider>()..checkSignInStatus(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Entry QC',
+      title: 'Entry RC',
       routes: route,
       initialRoute: '/',
       theme: ThemeData(

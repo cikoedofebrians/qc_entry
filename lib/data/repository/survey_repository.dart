@@ -24,7 +24,8 @@ class SurveyRepository {
       return Right(surveyList);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -40,7 +41,8 @@ class SurveyRepository {
       return Right(surveyTake);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -61,7 +63,8 @@ class SurveyRepository {
       return const Right(null);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {
@@ -80,7 +83,8 @@ class SurveyRepository {
       return const Right(null);
     } on DioException catch (e) {
       final message = e.response?.data['message'];
-      return Left(ServerFailure(message ?? "Terjadi kesalahan"));
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
     } on NetworkException catch (_) {
       return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
     } catch (_) {

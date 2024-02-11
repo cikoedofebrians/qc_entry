@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qc_entry/core/errors/failure.dart';
 import 'package:qc_entry/data/model/realcount/caleg/caleg_model.dart';
 import 'package:qc_entry/data/model/realcount/dapil/dapil_model.dart';
 import 'package:qc_entry/data/model/realcount/partai/partai_model.dart';
@@ -14,7 +15,6 @@ class PillegProvider extends ChangeNotifier {
   int? selectedDapilIndex;
   int? selectedKelurahanIndex;
   int? selectedPartaiIndex;
-  String unsuccessfulVotes = "";
   String tps = "";
   String enumeratorNotes = "";
   String jumlahDPT = "";
@@ -33,39 +33,43 @@ class PillegProvider extends ChangeNotifier {
 
   List<Caleg> calegList = [];
 
-  Future<String?> getData() async {
+  Future<Failure?> getData() async {
     isLoading = true;
     notifyListeners();
     final dapilResult = await getAllDapil();
-    if (dapilResult != null) return dapilResult;
+    if (dapilResult != null) {
+      isLoading = false;
+      notifyListeners();
+      return dapilResult;
+    }
     final capresResult = await getAllPartai();
     isLoading = false;
     notifyListeners();
     return capresResult;
   }
 
-  Future<String?> getAllDapil() async {
-    String? errorMessage;
+  Future<Failure?> getAllDapil() async {
+    Failure? failure;
     final result = await realcountRepository.getAllDapil();
     result.fold((l) {
-      errorMessage = l.message;
+      failure = l;
     }, (r) {
       dapilList = r;
       notifyListeners();
     });
-    return errorMessage;
+    return failure;
   }
 
-  Future<String?> getAllPartai() async {
-    String? errorMessage;
+  Future<Failure?> getAllPartai() async {
+    Failure? failure;
     final result = await realcountRepository.getAllPartai();
     result.fold((l) {
-      errorMessage = l.message;
+      failure = l;
     }, (r) {
       partaiList = r;
       notifyListeners();
     });
-    return errorMessage;
+    return failure;
   }
 
   setSelectedPartaiIndex(int newIndex) {
@@ -84,10 +88,6 @@ class PillegProvider extends ChangeNotifier {
 
   setTPS(String newTPS) {
     tps = newTPS;
-  }
-
-  setUnsuccessfulVotes(String newVotes) {
-    unsuccessfulVotes = newVotes;
   }
 
   setSelectedDapilIndex(int? newIndex) {
@@ -140,9 +140,6 @@ class PillegProvider extends ChangeNotifier {
         return "Suara calon legislatif tidak boleh ada yang kosong";
       }
     }
-    if (unsuccessfulVotes.isEmpty || calegList.isEmpty) {
-      return "Suara calon legislatif tidak boleh ada yang kosong";
-    }
     if (enumeratorNotes.isEmpty) {
       return "Catatan enumerator tidak boleh kosong";
     }
@@ -162,7 +159,6 @@ class PillegProvider extends ChangeNotifier {
           dapilList[selectedDapilIndex!].kelurahan[selectedKelurahanIndex!],
       tps: tps,
       hasilSuaraSah: hasilSuaraSah,
-      hasilSuaraTidakSah: int.parse(unsuccessfulVotes),
       notes: enumeratorNotes,
       jumlahDPT: int.parse(jumlahDPT),
     );

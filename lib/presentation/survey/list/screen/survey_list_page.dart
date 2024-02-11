@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:qc_entry/core/errors/error_handler.dart';
 import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/injector/injector.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
@@ -14,8 +15,9 @@ class SurveyListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) =>
-          getIt<SurveyListProvider>()..fetchSurveyList(context),
+      create: (context) => getIt<SurveyListProvider>()
+        ..fetchSurveyList(context)
+            .then((value) => errorHandler(value, context, false)),
       child: const SurveyListView(),
     );
   }
@@ -65,15 +67,15 @@ class SurveyListView extends StatelessWidget {
               : ListView.separated(
                   padding: const EdgeInsets.all(24),
                   itemBuilder: (_, index) => SurveyListItem(
-                        deskripsi:
-                            surveyListProvider.surveyList[index].deskripsi,
-                        title: surveyListProvider.surveyList[index].judul,
-                        id: surveyListProvider.surveyList[index].id,
-                      ),
+                    deskripsi: surveyListProvider.surveyList[index].deskripsi,
+                    title: surveyListProvider.surveyList[index].judul,
+                    id: surveyListProvider.surveyList[index].id,
+                  ),
                   separatorBuilder: (_, __) => const SizedBox(
-                        height: 12,
-                      ),
-                  itemCount: surveyListProvider.surveyList.length),
+                    height: 12,
+                  ),
+                  itemCount: surveyListProvider.surveyList.length,
+                ),
     );
   }
 }

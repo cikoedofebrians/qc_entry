@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:qc_entry/core/service/token_service.dart';
+import 'package:qc_entry/data/model/app/version/version_model.dart';
 import 'package:qc_entry/data/repository/auth_repository.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -45,14 +48,6 @@ class AuthProvider extends ChangeNotifier {
     _isSignedIn = false;
     tokenService.clearToken();
     notifyListeners();
-
-    // FOR TEMPORARY USE THIS WHEN LOGOUT MORE STABLE
-    // final response = await authRepository.logout();
-    // response.fold((l) {
-    //   errorMessage = l.message;
-    // }, (r) {
-    //   notifyListeners();
-    // });
 
     return errorMessage;
   }

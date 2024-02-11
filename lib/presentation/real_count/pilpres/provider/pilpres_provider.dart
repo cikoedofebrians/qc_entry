@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qc_entry/core/errors/failure.dart';
 import 'package:qc_entry/data/model/realcount/capres/capres_model.dart';
 import 'package:qc_entry/data/model/realcount/dapil/dapil_model.dart';
 import 'package:qc_entry/data/repository/raelcount_repository.dart';
@@ -29,39 +30,43 @@ class PilpresProvider extends ChangeNotifier {
 
   List<Capres> capresList = [];
 
-  Future<String?> getData() async {
+  Future<Failure?> getData() async {
     isLoading = true;
     notifyListeners();
     final dapilResult = await getAllDapil();
-    if (dapilResult != null) return dapilResult;
+    if (dapilResult != null) {
+      isLoading = false;
+      notifyListeners();
+      return dapilResult;
+    }
     final capresResult = await getAllCapres();
     isLoading = false;
     notifyListeners();
     return capresResult;
   }
 
-  Future<String?> getAllDapil() async {
-    String? errorMessage;
+  Future<Failure?> getAllDapil() async {
+    Failure? failure;
     final result = await realcountRepository.getAllDapil();
     result.fold((l) {
-      errorMessage = l.message;
+      failure = l;
     }, (r) {
       dapilList = r;
       notifyListeners();
     });
-    return errorMessage;
+    return failure;
   }
 
-  Future<String?> getAllCapres() async {
-    String? errorMessage;
+  Future<Failure?> getAllCapres() async {
+    Failure? failure;
     final result = await realcountRepository.getAllCapres();
     result.fold((l) {
-      errorMessage = l.message;
+      failure = l;
     }, (r) {
       capresList = r;
       notifyListeners();
     });
-    return errorMessage;
+    return failure;
   }
 
   setTPS(String newTPS) {
