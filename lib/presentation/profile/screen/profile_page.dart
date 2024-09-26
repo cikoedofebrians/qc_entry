@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qc_entry/core/errors/error_handler.dart';
 import 'package:qc_entry/core/extension/text_extension.dart';
-import 'package:qc_entry/core/injector/injector.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
 import 'package:qc_entry/presentation/auth/provider/auth_provider.dart';
@@ -11,22 +9,22 @@ import 'package:qc_entry/presentation/profile/provider/profile_provider.dart';
 import 'package:qc_entry/presentation/shared/custom_snackbar.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
 
+// class ProfilePage extends StatelessWidget {
+//   const ProfilePage({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider(
+//       create: (context) => getIt<ProfileProvider>()
+//         ..fetchUsers(context)
+//             .then((value) => errorHandler(value, context, false)),
+//       child: const ProfileView(),
+//     );
+//   }
+// }
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => getIt<ProfileProvider>()
-        ..fetchUsers(context)
-            .then((value) => errorHandler(value, context, false)),
-      child: const ProfileView(),
-    );
-  }
-}
-
-class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:qc_entry/core/errors/error_handler.dart';
 import 'package:qc_entry/core/extension/text_extension.dart';
 import 'package:qc_entry/core/injector/injector.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
@@ -8,6 +9,7 @@ import 'package:qc_entry/core/theme/app_text.dart';
 import 'package:qc_entry/data/repository/app_repository.dart';
 import 'package:qc_entry/presentation/home/provider/home_provider.dart';
 import 'package:qc_entry/presentation/main/screen/main_page.dart';
+import 'package:qc_entry/presentation/profile/provider/profile_provider.dart';
 import 'package:qc_entry/presentation/profile/screen/profile_page.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,6 +22,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (_) => getIt<ProfileProvider>()
+            ..fetchUsers(context).then(
+              (value) => errorHandler(value, context, false),
+            ),
+        ),
         ChangeNotifierProvider(
           create: (_) => HomeProvider(getIt<AppRepository>())
             ..checkAppVersion().then((value) {
@@ -49,9 +57,6 @@ class HomePage extends StatelessWidget {
               }
             }),
         ),
-        // ChangeNotifierProvider(
-        //   create: (_) => AppProvider(getIt<AppRepository>())..printSOme(),
-        // )
       ],
       child: const HomeView(),
     );

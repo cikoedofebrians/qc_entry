@@ -39,16 +39,13 @@ class SurveyTakeView extends StatefulWidget {
 }
 
 class _SurveyTakeViewState extends State<SurveyTakeView> {
-  late final TextEditingController textEditingController;
   @override
   void initState() {
-    textEditingController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    textEditingController.dispose();
     super.dispose();
   }
 
@@ -137,9 +134,11 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                     ],
                                   ),
                                   child: TextField(
-                                    controller: textEditingController,
-                                    onChanged: (value) => surveyTakeProvider
-                                        .changeTextArea(value),
+                                    controller: surveyTakeProvider
+                                        .textEditingController,
+                                    onChanged: (value) {
+                                      surveyTakeProvider.changeTextArea(value);
+                                    },
                                     maxLines: currentQuestionType ==
                                             QuestionType.TEXTAREA
                                         ? null
@@ -181,7 +180,8 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                       child: TextField(
                                         textAlign: TextAlign.center,
                                         keyboardType: TextInputType.number,
-                                        controller: textEditingController,
+                                        controller: surveyTakeProvider
+                                            .textEditingController,
                                         onChanged: (value) => surveyTakeProvider
                                             .changeNumberAnswer(value),
                                         maxLines: currentQuestionType ==
@@ -202,60 +202,69 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                     shrinkWrap: true,
                                     physics:
                                         const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (_, index) => Material(
-                                          color: currentQuestion
-                                                      .options[index].option ==
-                                                  surveyTakeProvider.radioAnswer
-                                              ? AppColor.secondaryColor
-                                              : Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            onTap: () => surveyTakeProvider
-                                                .selectRadio(currentQuestion
-                                                    .options[index]),
-                                            child: Ink(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 16,
-                                                      vertical: 12),
-                                              decoration: BoxDecoration(
-                                                color: currentQuestion
+                                    itemBuilder: (_, index) => GestureDetector(
+                                          onTap: () => surveyTakeProvider
+                                              .selectRadio(currentQuestion
+                                                  .options[index]),
+                                          child: AnimatedContainer(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 12),
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    blurRadius: 10,
+                                                    color: Colors.black
+                                                        .withOpacity(0.1))
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: currentQuestion
+                                                          .options[index]
+                                                          .option ==
+                                                      surveyTakeProvider
+                                                          .radioAnswer
+                                                  ? AppColor.secondaryColor
+                                                  : Colors.white,
+                                              border: Border.all(
+                                                width: 2,
+                                                color: AppColor.secondaryColor,
+                                              ),
+                                            ),
+                                            child: index ==
+                                                        currentQuestion.options
+                                                                .length -
+                                                            1 &&
+                                                    currentQuestion
                                                             .options[index]
                                                             .option ==
+                                                        "Lainnya"
+                                                ? TextField(
+                                                    controller: surveyTakeProvider
+                                                        .textEditingController,
+                                                    style: AppTextStyle.body2.copyWith(
+                                                        color: surveyTakeProvider
+                                                                    .radioAnswer ==
+                                                                currentQuestion
+                                                                    .options[
+                                                                        index]
+                                                                    .option
+                                                            ? Colors.white
+                                                            : AppColor
+                                                                .secondaryColor),
+                                                    onChanged: (value) =>
                                                         surveyTakeProvider
-                                                            .radioAnswer
-                                                    ? AppColor.secondaryColor
-                                                    : Colors.white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      blurRadius: 10,
-                                                      color: Colors.black
-                                                          .withOpacity(0.1))
-                                                ],
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border: Border.all(
-                                                  width: 2,
-                                                  color:
-                                                      AppColor.secondaryColor,
-                                                ),
-                                              ),
-                                              child: index ==
-                                                          currentQuestion
-                                                                  .options
-                                                                  .length -
-                                                              1 &&
-                                                      currentQuestion
-                                                              .options[index]
-                                                              .option ==
-                                                          "Lainnya"
-                                                  ? TextField(
-                                                      controller:
-                                                          textEditingController,
-                                                      style: AppTextStyle.body2.copyWith(
+                                                            .changeOtherRadioAnswer(
+                                                                value),
+                                                    onTap: () =>
+                                                        surveyTakeProvider
+                                                            .selectRadio(
+                                                                currentQuestion
+                                                                        .options[
+                                                                    index]),
+                                                    decoration: InputDecoration(
+                                                      hintStyle: AppTextStyle.body2.copyWith(
                                                           color: surveyTakeProvider
                                                                       .radioAnswer ==
                                                                   currentQuestion
@@ -265,54 +274,28 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                                               ? Colors.white
                                                               : AppColor
                                                                   .secondaryColor),
-                                                      onChanged: (value) =>
-                                                          surveyTakeProvider
-                                                              .changeOtherRadioAnswer(
-                                                                  value),
-                                                      onTap: () =>
-                                                          surveyTakeProvider
-                                                              .selectRadio(
-                                                                  currentQuestion
-                                                                          .options[
-                                                                      index]),
-                                                      decoration:
-                                                          InputDecoration(
-                                                        hintStyle: AppTextStyle.body2.copyWith(
-                                                            color: surveyTakeProvider
-                                                                        .radioAnswer ==
-                                                                    currentQuestion
-                                                                        .options[
-                                                                            index]
-                                                                        .option
-                                                                ? Colors.white
-                                                                : AppColor
-                                                                    .secondaryColor),
-                                                        hintText:
-                                                            currentQuestion
-                                                                .options[index]
-                                                                .option,
-                                                        contentPadding:
-                                                            EdgeInsets.zero,
-                                                        border:
-                                                            InputBorder.none,
-                                                      ),
-                                                    )
-                                                  : Text(
-                                                      currentQuestion
+                                                      hintText: currentQuestion
                                                           .options[index]
                                                           .option,
-                                                      style: AppTextStyle.body2.copyWith(
-                                                          color: currentQuestion
-                                                                      .options[
-                                                                          index]
-                                                                      .option ==
-                                                                  surveyTakeProvider
-                                                                      .radioAnswer
-                                                              ? Colors.white
-                                                              : AppColor
-                                                                  .secondaryColor),
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      border: InputBorder.none,
                                                     ),
-                                            ),
+                                                  )
+                                                : Text(
+                                                    currentQuestion
+                                                        .options[index].option,
+                                                    style: AppTextStyle.body2.copyWith(
+                                                        color: currentQuestion
+                                                                    .options[
+                                                                        index]
+                                                                    .option ==
+                                                                surveyTakeProvider
+                                                                    .radioAnswer
+                                                            ? Colors.white
+                                                            : AppColor
+                                                                .secondaryColor),
+                                                  ),
                                           ),
                                         ),
                                     separatorBuilder: (_, __) => const SizedBox(
@@ -323,29 +306,36 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                   QuestionType.TIME) {
                                 return Column(
                                   children: [
-                                    if (surveyTakeProvider.timeAnswer != null)
-                                      Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "Waktu terpilih",
-                                                style: AppTextStyle.body2
-                                                    .setBold(),
-                                              ),
-                                              const Spacer(),
-                                              Text(
-                                                  surveyTakeProvider
-                                                          .timeAnswer ??
-                                                      "",
-                                                  style: AppTextStyle.body2
-                                                      .setRegular()),
-                                            ],
-                                          ),
-                                          const Divider(),
-                                          const SizedBox(height: 20),
-                                        ],
-                                      ),
+                                    AnimatedSwitcher(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      child: surveyTakeProvider.timeAnswer !=
+                                              null
+                                          ? Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      "Waktu terpilih",
+                                                      style: AppTextStyle.body2
+                                                          .setBold(),
+                                                    ),
+                                                    const Spacer(),
+                                                    Text(
+                                                        surveyTakeProvider
+                                                                .timeAnswer ??
+                                                            "",
+                                                        style: AppTextStyle
+                                                            .body2
+                                                            .setRegular()),
+                                                  ],
+                                                ),
+                                                const Divider(),
+                                                const SizedBox(height: 20),
+                                              ],
+                                            )
+                                          : const SizedBox(),
+                                    ),
                                     QCEntryButton(
                                         color: AppColor.secondaryColor,
                                         title: "Pilih Waktu",
@@ -366,30 +356,37 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                                   QuestionType.DATE) {
                                 return Column(
                                   children: [
-                                    if (surveyTakeProvider.dateTimeAnswer !=
-                                        null)
-                                      Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "Waktu terpilih",
-                                                style: AppTextStyle.body2
-                                                    .setBold(),
-                                              ),
-                                              const Spacer(),
-                                              Text(
-                                                  surveyTakeProvider
-                                                          .dateTimeAnswer ??
-                                                      "",
-                                                  style: AppTextStyle.body2
-                                                      .setRegular()),
-                                            ],
-                                          ),
-                                          const Divider(),
-                                          const SizedBox(height: 20),
-                                        ],
-                                      ),
+                                    AnimatedSwitcher(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      child: surveyTakeProvider
+                                                  .dateTimeAnswer !=
+                                              null
+                                          ? Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      "Waktu terpilih",
+                                                      style: AppTextStyle.body2
+                                                          .setBold(),
+                                                    ),
+                                                    const Spacer(),
+                                                    Text(
+                                                        surveyTakeProvider
+                                                                .dateTimeAnswer ??
+                                                            "",
+                                                        style: AppTextStyle
+                                                            .body2
+                                                            .setRegular()),
+                                                  ],
+                                                ),
+                                                const Divider(),
+                                                const SizedBox(height: 20),
+                                              ],
+                                            )
+                                          : const SizedBox(),
+                                    ),
                                     QCEntryButton(
                                       color: AppColor.secondaryColor,
                                       title: "Pilih Tanggal",
@@ -422,6 +419,14 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                     ),
                   ),
                   const SizedBox(height: 12),
+                  if (surveyTakeProvider.previousIndex.isNotEmpty)
+                    QCEntryButton(
+                      color: AppColor.quaternaryColor,
+                      textColor: Colors.black,
+                      title: "Kembali ke Pertanyaan sebelumnya",
+                      onTap: () => surveyTakeProvider.goToPreviousQuestion(),
+                    ),
+                  const SizedBox(height: 12),
                   QCEntryButton(
                     color: AppColor.tertiaryColor,
                     isLoading: surveyTakeProvider.isSubmitLoading,
@@ -439,7 +444,7 @@ class _SurveyTakeViewState extends State<SurveyTakeView> {
                             showQCEntrySnackBar(context: context, title: value);
                           }
                         } else {
-                          textEditingController.clear();
+                          surveyTakeProvider.textEditingController.clear();
                         }
                       });
                     },

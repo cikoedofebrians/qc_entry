@@ -17,6 +17,8 @@ class DioClient {
       receiveTimeout: const Duration(seconds: 15),
       contentType: CONTENT_TYPE,
     );
+
+    _dio.interceptors.add(LogInterceptor());
   }
 
   Future<Response> get(
@@ -35,11 +37,9 @@ class DioClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      // print(response);
 
       return response;
     } catch (e) {
-      // print(e);
       rethrow;
     }
   }
