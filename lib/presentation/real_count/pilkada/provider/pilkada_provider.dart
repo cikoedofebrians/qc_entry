@@ -104,7 +104,7 @@ class PilkadaProvider extends ChangeNotifier {
 
     for (var cakada in cakadaList) {
       if (cakada.suara.isEmpty) {
-        return "Suara calon pilkada tidak boleh ada yang kosong";
+        return "Suara calon kepala daerah tidak boleh ada yang kosong";
       }
     }
     if (unsuccessfulVotes.isEmpty) {
