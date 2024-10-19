@@ -7,8 +7,17 @@ import 'package:qc_entry/data/repository/survey_repository.dart';
 import 'package:qc_entry/data/model/survey/survey_option/survey_option.dart';
 
 class SurveyTakeProvider extends ChangeNotifier {
-  SurveyTakeProvider(this.surveyRepository);
+  SurveyTakeProvider({
+    required this.surveyRepository,
+    required this.kecamatan,
+    required this.kelurahan,
+    required this.respondentName,
+  });
+
   final SurveyRepository surveyRepository;
+  final String kecamatan;
+  final String kelurahan;
+  final String respondentName;
 
   TextEditingController textEditingController = TextEditingController();
   List<SurveyQuestion> surveyQuestions = [];
@@ -107,7 +116,12 @@ class SurveyTakeProvider extends ChangeNotifier {
 
     if (currentQuestionIndex == surveyQuestions.length - 1) {
       setSubmitLoading(true);
-      final response = await surveyRepository.submitAnswer(submitBody);
+      final response = await surveyRepository.submitAnswer({
+        "nama_responden": respondentName,
+        "kecamatan": kecamatan,
+        "kelurahan": kelurahan,
+        "answers": submitBody,
+      });
       setSubmitLoading(false);
       String message = "";
       response.fold((l) => message = l.message, (r) => message = "complete");

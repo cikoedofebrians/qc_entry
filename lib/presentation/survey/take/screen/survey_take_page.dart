@@ -6,6 +6,7 @@ import 'package:qc_entry/core/injector/injector.dart';
 import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
 import 'package:qc_entry/data/model/survey/survey_question/survey_question.dart';
+import 'package:qc_entry/data/repository/survey_repository.dart';
 import 'package:qc_entry/presentation/shared/custom_snackbar.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
 import 'package:qc_entry/presentation/survey/complete/screen/complete_page.dart';
@@ -18,13 +19,27 @@ class SurveyTakePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surveyId =
-        ModalRoute.of(context)!.settings.arguments as SurveyTakeParams;
+    final arg =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
+    if (arg == null) {
+      Navigator.of(context).pop();
+    }
+
+    final surveyTakeParams = arg!['id'] as SurveyTakeParams;
+    final kecamatan = arg['kecamatan'] as String;
+    final kelurahan = arg['kelurahan'] as String;
+    final respondentName = arg['respondent_name'] as String;
+
     return ChangeNotifierProvider(
-      create: (context) =>
-          getIt<SurveyTakeProvider>()..getAllQuestions(surveyId.id),
+      create: (context) => SurveyTakeProvider(
+          surveyRepository: getIt<SurveyRepository>(),
+          kecamatan: kecamatan,
+          kelurahan: kelurahan,
+          respondentName: respondentName)
+        ..getAllQuestions(surveyTakeParams.id),
       child: SurveyTakeView(
-        title: surveyId.title,
+        title: surveyTakeParams.title,
       ),
     );
   }

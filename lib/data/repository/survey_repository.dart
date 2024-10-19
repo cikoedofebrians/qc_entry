@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:qc_entry/core/errors/exception.dart';
@@ -50,12 +52,12 @@ class SurveyRepository {
     }
   }
 
-  Future<Either<Failure, void>> submitAnswer(
-      List<Map<String, dynamic>> answers) async {
+  Future<Either<Failure, void>> submitAnswer(Map<String, dynamic> data) async {
     try {
+      log("SURVEY REQUEST BODY: $data");
       final response = await _dio.post(
         answerSurveyUrl,
-        data: {"answers": answers},
+        data: data,
       );
       if (response.statusCode != 200) {
         throw Exception();

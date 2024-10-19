@@ -4,7 +4,7 @@ import 'package:qc_entry/core/theme/app_color.dart';
 import 'package:qc_entry/core/theme/app_text.dart';
 import 'package:qc_entry/presentation/shared/custom_button.dart';
 import 'package:qc_entry/presentation/survey/list/component/survey_list_item.dart';
-import 'package:qc_entry/presentation/survey/take/screen/survey_take_page.dart';
+import 'package:qc_entry/presentation/survey/surveyor_data/screen/respondent_data_page.dart';
 import 'package:qc_entry/presentation/survey/warning/component/warning_item.dart';
 
 class WarningPage extends StatelessWidget {
@@ -75,10 +75,12 @@ class WarningPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               QCEntryButton(
-                  title: "Mulai Survey",
-                  onTap: () => Navigator.of(context).pushReplacementNamed(
-                      SurveyTakePage.route,
-                      arguments: id)),
+                title: "Mulai Survey",
+                onTap: () => Navigator.of(context).pushReplacementNamed(
+                  RespondentDataPage.route,
+                  arguments: id,
+                ),
+              ),
             ],
           ),
         ),

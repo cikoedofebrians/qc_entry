@@ -14,7 +14,6 @@ import 'package:qc_entry/presentation/real_count/partai/provider/partai_provider
 import 'package:qc_entry/presentation/real_count/pilleg/provider/pilleg_provider.dart';
 import 'package:qc_entry/presentation/real_count/pilpres/provider/pilpres_provider.dart';
 import 'package:qc_entry/presentation/survey/list/provider/survey_list_provider.dart';
-import 'package:qc_entry/presentation/survey/take/provider/survey_take_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.I;
@@ -38,8 +37,6 @@ Future<void> configureDependencies() async {
   getIt.registerFactory(() => ProfileProvider(getIt<AuthRepository>()));
   getIt.registerFactory(() => SurveyRepository(getIt<DioClient>()));
   getIt.registerFactory(() => SurveyListProvider(getIt<SurveyRepository>()));
-
-  getIt.registerFactory(() => SurveyTakeProvider(getIt<SurveyRepository>()));
 
   //APP
   getIt.registerFactory(() => AppRepository(getIt<DioClient>()));

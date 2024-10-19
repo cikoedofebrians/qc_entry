@@ -6,12 +6,12 @@ import 'package:qc_entry/core/theme/app_text.dart';
 class QCEntryDropdown extends StatelessWidget {
   const QCEntryDropdown({
     super.key,
-    required this.textEditingController,
+    this.textEditingController,
     required this.items,
     required this.label,
     required this.onSelected,
   });
-  final TextEditingController textEditingController;
+  final TextEditingController? textEditingController;
   final List<DropdownMenuEntry> items;
   final String label;
   final Function(dynamic) onSelected;
