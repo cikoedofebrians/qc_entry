@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:qc_entry/core/errors/exception.dart';
 import 'package:qc_entry/core/errors/failure.dart';
 import 'package:qc_entry/core/network/dio_client.dart';
 import 'package:qc_entry/core/network/endpoints.dart';
+import 'package:qc_entry/data/model/realcount/cakada/cakada_model.dart';
 import 'package:qc_entry/data/model/realcount/caleg/caleg_model.dart';
 import 'package:qc_entry/data/model/realcount/capres/capres_model.dart';
 import 'package:qc_entry/data/model/realcount/dapil/dapil_model.dart';
@@ -92,6 +95,25 @@ class RealcountRepository {
     }
   }
 
+  Future<Either<Failure, List<Cakada>>> getAllCakada() async {
+    try {
+      final response = await _dio.get(pilkadaUrl);
+      List<Cakada> cakadaList = [];
+      for (var cakada in response.data['data']) {
+        cakadaList.add(Cakada.fromJson(cakada));
+      }
+      return Right(cakadaList);
+    } on DioException catch (e) {
+      final message = e.response?.data['message'];
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
+    } on NetworkException catch (_) {
+      return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
+    } catch (_) {
+      return const Left(ParsingFailure("Terjadi kesalahan"));
+    }
+  }
+
   Future<Either<Failure, void>> submitCapres({
     required int dapilId,
     required String kelurahan,
@@ -111,6 +133,39 @@ class RealcountRepository {
         'laporan': notes,
         'jumlah_dpt': jumlahDPT,
       });
+      return const Right(null);
+    } on DioException catch (e) {
+      final message = e.response?.data['message'];
+      return Left(ServerFailure(
+          message ?? "Terjadi kesalahan", e.response?.statusCode));
+    } on NetworkException catch (_) {
+      return const Left(NetworkFailure("Tidak bisa terhubung keinternet"));
+    } catch (_) {
+      return const Left(ParsingFailure("Terjadi kesalahan"));
+    }
+  }
+
+  Future<Either<Failure, void>> submitPilkada({
+    required int dapilId,
+    required String kelurahan,
+    required String tps,
+    required List<Map<String, int>> hasilSuaraSah,
+    required int hasilSuaraTidakSah,
+    required String notes,
+    required int jumlahDPT,
+  }) async {
+    try {
+      final data = {
+        'dapil_id': dapilId,
+        'kelurahan': kelurahan,
+        'tps': tps,
+        'hasil_suara_sah': hasilSuaraSah,
+        'hasil_suara_tidak_sah': hasilSuaraTidakSah,
+        'laporan': notes,
+        'jumlah_dpt': jumlahDPT,
+      };
+      log("SUBMIT PILKADA WITH DATA: $data");
+      await _dio.post(submitPilkadaUrl, data: data);
       return const Right(null);
     } on DioException catch (e) {
       final message = e.response?.data['message'];

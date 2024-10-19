@@ -24,3 +24,5 @@ const String pilparUrl = '/pilpar';
 const String submitPilparUrl = '/pilpar/submit-suara';
 String pillegUrl(int partaiId, int dapilId) => '/pilleg/$partaiId/$dapilId';
 const String submitPillegUrl = '/pilleg/submit-suara';
+const String pilkadaUrl = '/pilkada';
+const String submitPilkadaUrl = '/pilkada/submit-suara';
