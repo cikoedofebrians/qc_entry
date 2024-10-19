@@ -141,7 +141,7 @@ class _PilpresViewState extends State<PilkadaView> {
                         height: 24,
                       ),
                       Text(
-                        "Suara Paslon Capres - Cawapres",
+                        "Suara Calon Kepala Daerah",
                         style: AppTextStyle.heading5
                             .setSemiBold()
                             .copyWith(color: AppColor.secondaryColor),
