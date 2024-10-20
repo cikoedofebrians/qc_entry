@@ -115,17 +115,23 @@ class SurveyTakeProvider extends ChangeNotifier {
     }
 
     if (currentQuestionIndex == surveyQuestions.length - 1) {
-      setSubmitLoading(true);
-      final response = await surveyRepository.submitAnswer({
-        "nama_responden": respondentName,
-        "kecamatan": kecamatan,
-        "kelurahan": kelurahan,
-        "answers": submitBody,
-      });
-      setSubmitLoading(false);
-      String message = "";
-      response.fold((l) => message = l.message, (r) => message = "complete");
-      return message;
+      try {
+        setSubmitLoading(true);
+        final response = await surveyRepository.submitAnswer({
+          "survey_title_id": surveyId,
+          "nama_responden": respondentName,
+          "kecamatan": kecamatan,
+          "kelurahan": kelurahan,
+          "answers": submitBody,
+        });
+        setSubmitLoading(false);
+        String message = "";
+        response.fold((l) => message = l.message, (r) => message = "complete");
+        return message;
+      } catch (e) {
+        setSubmitLoading(false);
+        return "Terjadi kesalahan. Coba lagi dalam beberapa saat";
+      }
     } else if (willSkipPage != null) {
       previousIndex.add(currentQuestionIndex);
       currentQuestionIndex = willSkipPage! - 1;

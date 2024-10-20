@@ -37,7 +37,8 @@ class SurveyTakePage extends StatelessWidget {
           kecamatan: kecamatan,
           kelurahan: kelurahan,
           respondentName: respondentName)
-        ..getAllQuestions(surveyTakeParams.id),
+        ..getAllQuestions(surveyTakeParams.id)
+        ..changeSurveyId(surveyTakeParams.id),
       child: SurveyTakeView(
         title: surveyTakeParams.title,
       ),
