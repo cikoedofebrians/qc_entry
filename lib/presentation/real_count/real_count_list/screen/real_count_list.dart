@@ -39,27 +39,30 @@ class RealCountListView extends StatelessWidget {
             ),
             const Spacer(),
             const _RealCountListItem(
+              route: PilkadaPage.route,
+              title: "Pemilihan Kepala Daerah",
+              shorten: "PILKADA",
+            ),
+            const SizedBox(height: 12),
+            const _RealCountListItem(
               route: PilpresPage.route,
               title: "Pemilihan Presiden",
               shorten: "PILPRES",
+              disable: true,
             ),
             const SizedBox(height: 12),
             const _RealCountListItem(
               route: PartaiPage.route,
               title: "Pemilihan Partai",
               shorten: "PARPOL",
+              disable: true,
             ),
             const SizedBox(height: 12),
             const _RealCountListItem(
               route: PillegPage.route,
               title: "Pemilihan Legislatif",
               shorten: "PILEG",
-            ),
-            const SizedBox(height: 12),
-            const _RealCountListItem(
-              route: PilkadaPage.route,
-              title: "Pemilihan Kepala Daerah",
-              shorten: "PILKADA",
+              disable: true,
             ),
             const Spacer(),
           ],
@@ -74,21 +77,26 @@ class _RealCountListItem extends StatelessWidget {
     required this.route,
     required this.title,
     required this.shorten,
+    this.disable = false,
   });
 
   final String title;
   final String route;
   final String shorten;
+  final bool disable;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(10),
-      onTap: () => Navigator.of(context).pushNamed(route),
+      onTap: disable ? null : () => Navigator.of(context).pushNamed(route),
       child: Ink(
         // padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(width: 2, color: AppColor.primaryColor),
+          color: disable ? Colors.grey[300] : Colors.white,
+          border: Border.all(
+              width: 2,
+              color: disable ? Colors.grey[600]! : AppColor.primaryColor),
           boxShadow: [
             BoxShadow(blurRadius: 10, color: Colors.black.withOpacity(0.1))
           ],
@@ -104,32 +112,33 @@ class _RealCountListItem extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: AppTextStyle.heading5
-                          .setSemiBold()
-                          .copyWith(color: AppColor.primaryColor),
+                      style: AppTextStyle.heading5.setSemiBold().copyWith(
+                          color: disable
+                              ? Colors.grey[600]
+                              : AppColor.primaryColor),
                     ),
                   ),
-                  const Icon(
+                  Icon(
                     Icons.navigate_next_rounded,
                     size: 28,
-                    color: AppColor.primaryColor,
+                    color: disable ? Colors.grey[600] : AppColor.primaryColor,
                   )
                 ],
               ),
             ),
             Container(
               alignment: Alignment.centerLeft,
-              decoration: const BoxDecoration(
-                  color: AppColor.primaryColor,
-                  borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                  color: disable ? Colors.grey[600] : AppColor.primaryColor,
+                  borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(4),
                       bottomRight: Radius.circular(4))),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Text(
                 shorten,
-                style: AppTextStyle.body2
-                    .setSemiBold()
-                    .copyWith(color: AppColor.quaternaryColor),
+                style: AppTextStyle.body2.setSemiBold().copyWith(
+                    color:
+                        disable ? Colors.grey[400] : AppColor.quaternaryColor),
               ),
             )
           ],
